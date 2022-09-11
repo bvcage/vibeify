@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CLIENT_ID } from '../keys';
 
-function LoginButton () {
+function LoginButton ({ onLogout }) {
 
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("user_id") !== null);
 
@@ -37,7 +37,10 @@ function LoginButton () {
     }
 
     function toggleLoginLogout () {
-        if (isLoggedIn) localStorage.clear()
+        if (isLoggedIn) {
+            localStorage.clear();
+            onLogout();
+        }
         else authorizeApp()
         setIsLoggedIn(!isLoggedIn);
     }

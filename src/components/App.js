@@ -20,7 +20,23 @@ function App() {
   } else if (!!accessToken) {
     fetchUserLibrary();
   } else {
-    console.log('uh oh');
+    console.log('please log in');
+  }
+
+  function clearLocal () {
+    const url = 'http://localhost:3001/songs';
+    fetch(url)
+    .then(r => r.json())
+    .then(library => {
+      library.forEach(song => {
+        fetch(`${url}/${song.id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+      })
+    })
   }
 
   function fetchAccessToken () {
@@ -280,7 +296,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <LoginButton />
+        <LoginButton onLogout={clearLocal} />
       </header>
     </div>
   );
