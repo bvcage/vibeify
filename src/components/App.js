@@ -1,5 +1,5 @@
 import '../App.css';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import LoginButton from './LoginButton';
 import { Base64 } from 'js-base64';
@@ -12,11 +12,12 @@ function App() {
   let accessToken = '';
   let userId = '';
 
-  useEffect(() => {
-    if (searchParams.get('code')) {
-      fetchAccessToken();
-    }
-  }, []);
+  let songIdAry = [];
+  loadLocalSongIds();
+
+  if (searchParams.get('code')) {
+    fetchAccessToken();
+  }
 
   function fetchAccessToken () {
     console.log('fetching access token ...');
@@ -49,6 +50,34 @@ function App() {
       await fetchUserLibrary();
     })
     .catch(error => console.log(error))
+  }
+
+  function fetchAudioFeatures (songId) {
+    const url = `https://api.spotify.com/v1/audio-features/${songId}`;
+    return fetch(url, {
+      headers: {
+        "Authorization": 'Bearer ' + accessToken,
+        "Content-Type": "application/json"
+      }
+    })
+    .then(r => r.json())
+    .then(data => {return data});
+  }
+
+  function fetchAudioFeaturesForLibrary () {
+    fetch("http://localhost:3001/songs")
+    .then(r => r.json())
+    .then(async(library) => {
+      await library.forEach(async (song) => {
+        const audioFeatures = await fetchAudioFeatures(song.id);
+        const patchSong = {
+          ...song,
+          "audio_features": {...audioFeatures}
+        }
+        const updatedSong = await patchSongOnLocal(patchSong);
+        // console.log(updatedSong);
+      })
+    })
   }
 
   async function fetchData (apiUrl, info) {
@@ -116,9 +145,14 @@ function App() {
   }
 
   async function fetchUserLibrary () {
+
     console.log('fetching user library ...');
     await fetchUserLikedSongs();
     await fetchUserPlaylists();
+
+    console.log('fetching audio features for library ...');
+    await fetchAudioFeaturesForLibrary();
+
     return;
   }
 
@@ -166,47 +200,72 @@ function App() {
     });
   }
 
+  function loadLocalSongIds () {
+    fetch(`http://localhost:3001/songs`)
+    .then(r => r.json())
+    .then(library => {
+      library.forEach(song => songIdAry.push(song.id))
+    })
+  }
+
   function parseSpotifyTracksAry (tracksAry) {
     const songsAry = [];
     tracksAry.forEach(track => {
       const albumEntry = {
+        "id": track.album.id,
         "name": track.album.name,
+        "url": track.album.external_urls.spotify,
         "imageUrl": track.album.images[0].url,
-        "sId": track.album.id,
-        "sUrl": track.album.external_urls.spotify,
       }
       const artistsAry = track.artists.map(artist => {
         return {
+          "id": artist.id,
           "name": artist.name,
-          "sId": artist.id,
-          "sUrl": artist.external_urls.spotify,
+          "url": artist.external_urls.spotify,
         }
       })
       const songEntry = {
+        "id": track.id,
         "name": track.name,
-        "sId": track.id,
-        "sUrl": track.external_urls.spotify,
         "album": albumEntry,
         "artists": artistsAry,
+        "url": track.external_urls.spotify,
       }
       songsAry.push(songEntry);
     })
     return songsAry;
   }
 
-  function postSongsAryToLocal (songsAry) {
-    songsAry.forEach(song => postSongToLocal(song))
-  }
-
-  async function postSongToLocal (song) {
-    await fetch(`http://localhost:3001/songs`, {
-      method: "POST",
+  async function patchSongOnLocal (patchSong) {
+    const url = `http://localhost:3001/songs/${patchSong.id}`
+    return await fetch(url, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(song),
+      body: JSON.stringify(patchSong),
     })
-    .catch(error => console.log('uh oh'))
+    .then(r => r.json())
+    .then(patch => {return patch});
+  }
+
+  function postSongsAryToLocal (songsAry) {
+    songsAry.forEach(song => {
+      postSongToLocal(song);
+      songIdAry.push(song.id);
+    });
+  }
+
+  async function postSongToLocal (song) {
+    if (!songIdAry.find(ele => ele === song.id)) {
+      await fetch(`http://localhost:3001/songs`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(song),
+      });
+    }
   }
 
   return (
