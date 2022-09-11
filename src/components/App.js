@@ -10,9 +10,12 @@ function App() {
 
   const [searchParams] = useSearchParams();
   let accessToken = '';
+  let userId = '';
 
   useEffect(() => {
-    if (searchParams.get('code')) fetchAccessToken();
+    if (searchParams.get('code')) {
+      fetchAccessToken();
+    }
   }, []);
 
   function fetchAccessToken () {
@@ -41,88 +44,169 @@ function App() {
       // let now = new Date()
       // expiration = now.setSeconds(now.getSeconds() + data.expires_in);
     })
-    .then(() => {
-      fetchUserLibrary();
+    .then(async () => {
+      await fetchUserProfile();
+      await fetchUserLibrary();
     })
     .catch(error => console.log(error))
   }
 
-  function fetchUserLibrary () {
-    console.log('fetching user library ...');
-    const url = "https://api.spotify.com/v1/me/tracks";
-    fetch (url, {
+  async function fetchData (apiUrl, info) {
+    // setup return object
+    let data = [];
+    // check apiUrl has query character at end
+    if (apiUrl.charAt(apiUrl.length - 1) !== '?') {apiUrl += '?'}
+    // call to API
+    const limit = 20;
+    const numCalls = Math.ceil(info.total / limit);
+    for (let i = 0; i < numCalls; ++i) {
+      const query = new URLSearchParams({
+        offset: limit * i,
+      })
+      const fetchUrl = apiUrl + query;
+      await fetch(fetchUrl, {
+        headers: {
+          "Authorization": 'Bearer ' + accessToken,
+          "Content-Type": "application/json"
+        }
+      })
+      .then(r => r.json())
+      .then(f => data.push(f))
+    }
+    return data;
+  }
+
+  function fetchInfo (apiUrl) {
+    const url = apiUrl + "?limit=1";
+    return fetch (url, {
       headers: {
         "Authorization": 'Bearer ' + accessToken,
         "Content-Type": "application/json"
       }
     })
     .then(r => r.json())
-    .then(data => {
-      console.log(data);
-      let limit = data.limit;
-      let numFetch = Math.ceil(data.total / data.limit) - 1;
-      for (let i=0; i<numFetch; ++i) {
-        const query = new URLSearchParams({
-          offset: limit * i,
-        })
-        const url = `https://api.spotify.com/v1/me/tracks?` + query;
-        fetch(url, {
-          headers: {
-            "Authorization": 'Bearer ' + accessToken,
-            "Content-Type": "application/json"
-          }
-        })
-        .then(r => r.json())
-        .then(data => {
-          parseSpotifyData(data.items);
-        })
-      }
-    })
+    .then(data => {return data})
   }
 
-  function parseSpotifyData (spotifyData) {
-    // console.log(spotifyData);
-    spotifyData.forEach(entry => {
-      const track = entry.track;
-
-      const albumEntry = {
-        name: track.album.name,
-        imageUrl: track.album.images[0].url,
-        sId: track.album.id,
-        sUrl: track.album.external_urls.spotify,
+  function fetchTracksForPlaylist (playlistApiUrl) {
+    return fetch(playlistApiUrl, {
+      headers: {
+        "Authorization": 'Bearer ' + accessToken,
+        "Content-Type": "application/json"
       }
+    })
+    .then(r => r.json())
+    .then(data => {return data.items})
+  }
 
+  async function fetchTracksForPlaylistAry (playlistAry) {
+    let playlistTracksAry = [];
+    playlistAry.forEach(playlist => {
+      playlistTracksAry.push(fetchTracksForPlaylist(playlist.tracks.href));
+    });
+    playlistTracksAry = await Promise.all(playlistTracksAry);
+
+    const totalTrackAry = [];
+    playlistTracksAry.forEach(playlist => {
+      playlist.forEach(entry => {
+        totalTrackAry.push(entry.track);
+      })
+    })
+    return totalTrackAry;
+  }
+
+  async function fetchUserLibrary () {
+    console.log('fetching user library ...');
+    await fetchUserLikedSongs();
+    await fetchUserPlaylists();
+    return;
+  }
+
+  async function fetchUserLikedSongs () {
+    const apiUrl = "https://api.spotify.com/v1/me/tracks";
+    const infoObj = await fetchInfo(apiUrl);
+    const dataAry = await fetchData(apiUrl, infoObj);
+    let likedSongsAry = [];
+    dataAry.forEach(entry => {
+      entry.items.forEach(item => {
+        likedSongsAry.push(item.track);
+      })
+    });
+    likedSongsAry = parseSpotifyTracksAry(likedSongsAry);
+    postSongsAryToLocal(likedSongsAry);
+  }
+
+  async function fetchUserPlaylists () {
+    const apiUrl = "https://api.spotify.com/v1/me/playlists";
+    const info = await fetchInfo(apiUrl);
+    const dataAry = await fetchData(apiUrl, info);
+
+    let playlistsAry = [];
+    dataAry.forEach(entry => playlistsAry.push(...(entry.items)));
+    playlistsAry = playlistsAry.filter(playlist => playlist.owner.id === userId);
+
+    let allTracksAry = await fetchTracksForPlaylistAry(playlistsAry);
+    allTracksAry = parseSpotifyTracksAry(allTracksAry);
+
+    postSongsAryToLocal(allTracksAry);
+  }
+
+  async function fetchUserProfile () {
+    const url = "https://api.spotify.com/v1/me";
+    return fetch(url, {
+      headers: {
+        "Authorization": 'Bearer ' + accessToken,
+        "Content-Type": "application/json"
+      }
+    })
+    .then(r => r.json())
+    .then(profile => {
+      userId = profile.id;
+      return profile;
+    });
+  }
+
+  function parseSpotifyTracksAry (tracksAry) {
+    const songsAry = [];
+    tracksAry.forEach(track => {
+      const albumEntry = {
+        "name": track.album.name,
+        "imageUrl": track.album.images[0].url,
+        "sId": track.album.id,
+        "sUrl": track.album.external_urls.spotify,
+      }
       const artistsAry = track.artists.map(artist => {
         return {
-          name: artist.name,
-          sId: artist.id,
-          sUrl: artist.external_urls.spotify,
+          "name": artist.name,
+          "sId": artist.id,
+          "sUrl": artist.external_urls.spotify,
         }
       })
-
       const songEntry = {
-        name: track.name,
-        sId: track.id,
-        sUrl: track.external_urls.spotify,
-        album: albumEntry,
-        artists: artistsAry,
+        "name": track.name,
+        "sId": track.id,
+        "sUrl": track.external_urls.spotify,
+        "album": albumEntry,
+        "artists": artistsAry,
       }
-
-      postSongToLocal(songEntry);
-
+      songsAry.push(songEntry);
     })
+    return songsAry;
   }
 
-  function postSongToLocal (song) {
-    fetch(`http://localhost:3001/songs`, {
+  function postSongsAryToLocal (songsAry) {
+    songsAry.forEach(song => postSongToLocal(song))
+  }
+
+  async function postSongToLocal (song) {
+    await fetch(`http://localhost:3001/songs`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(song),
     })
-    .then(r => r.json())
-    .then(data => console.log(data));
+    .catch(error => console.log('uh oh'))
   }
 
   return (

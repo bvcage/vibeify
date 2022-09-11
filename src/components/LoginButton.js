@@ -7,7 +7,7 @@ function LoginButton () {
         let query = new URLSearchParams({
             response_type: "code",
             client_id: CLIENT_ID,
-            scope: "user-library-read",
+            scope: "user-library-read playlist-read-private",
             redirect_uri: "http://localhost:3000/index.html",
             state: genRandomString(20),
             // code_challenge_method: "S256",
