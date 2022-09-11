@@ -69,13 +69,15 @@ function App() {
     .then(r => r.json())
     .then(async(library) => {
       await library.forEach(async (song) => {
-        const audioFeatures = await fetchAudioFeatures(song.id);
-        const patchSong = {
-          ...song,
-          "audio_features": {...audioFeatures}
+        if (!song.audio_features) {
+          const audioFeatures = await fetchAudioFeatures(song.id);
+          const patchSong = {
+            ...song,
+            "audio_features": {...audioFeatures}
+          }
+          const updatedSong = await patchSongOnLocal(patchSong);
+          // console.log(updatedSong);
         }
-        const updatedSong = await patchSongOnLocal(patchSong);
-        // console.log(updatedSong);
       })
     })
   }
