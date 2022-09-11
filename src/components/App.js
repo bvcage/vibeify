@@ -38,7 +38,7 @@ function App() {
       accessToken = data.access_token;
       // refreshToken = data.refresh_token;
       // calc & set time to refresh
-      let now = new Date()
+      // let now = new Date()
       // expiration = now.setSeconds(now.getSeconds() + data.expires_in);
     })
     .then(() => {
@@ -74,11 +74,55 @@ function App() {
         })
         .then(r => r.json())
         .then(data => {
-          console.log(data);
-          // store data into local server
+          parseSpotifyData(data.items);
         })
       }
     })
+  }
+
+  function parseSpotifyData (spotifyData) {
+    // console.log(spotifyData);
+    spotifyData.forEach(entry => {
+      const track = entry.track;
+
+      const albumEntry = {
+        name: track.album.name,
+        imageUrl: track.album.images[0].url,
+        sId: track.album.id,
+        sUrl: track.album.external_urls.spotify,
+      }
+
+      const artistsAry = track.artists.map(artist => {
+        return {
+          name: artist.name,
+          sId: artist.id,
+          sUrl: artist.external_urls.spotify,
+        }
+      })
+
+      const songEntry = {
+        name: track.name,
+        sId: track.id,
+        sUrl: track.external_urls.spotify,
+        album: albumEntry,
+        artists: artistsAry,
+      }
+
+      postSongToLocal(songEntry);
+
+    })
+  }
+
+  function postSongToLocal (song) {
+    fetch(`http://localhost:3001/songs`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(song),
+    })
+    .then(r => r.json())
+    .then(data => console.log(data));
   }
 
   return (
