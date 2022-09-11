@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CLIENT_ID } from '../keys';
 
 function LoginButton () {
+
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("user_id") !== null);
 
     function authorizeApp () {
         let query = new URLSearchParams({
@@ -34,8 +36,14 @@ function LoginButton () {
         return randString;
     }
 
+    function toggleLoginLogout () {
+        if (isLoggedIn) localStorage.clear()
+        else authorizeApp()
+        setIsLoggedIn(!isLoggedIn);
+    }
+
     return (
-        <button onClick={authorizeApp}>login</button>
+        <button onClick={toggleLoginLogout}>{localStorage.getItem("user_id") ? 'logout': 'login'}</button>
     )
 }
 

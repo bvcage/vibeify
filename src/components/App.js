@@ -9,14 +9,18 @@ import { CLIENT_ID, CLIENT_SECRET } from '../keys';
 function App() {
 
   const [searchParams] = useSearchParams();
-  let accessToken = '';
-  let userId = '';
+  let userId = localStorage.getItem("user_id");
+  let accessToken = localStorage.getItem("access_token");
 
   let songIdAry = [];
   loadLocalSongIds();
 
   if (searchParams.get('code')) {
-    fetchAccessToken();
+    initApp();
+  } else if (!!accessToken) {
+    fetchUserLibrary();
+  } else {
+    console.log('uh oh');
   }
 
   function fetchAccessToken () {
@@ -28,7 +32,7 @@ function App() {
       client_id: CLIENT_ID,
     });
     const url = `https://accounts.spotify.com/api/token?` + query;
-    fetch(url, {
+    return fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -38,16 +42,9 @@ function App() {
     })
     .then(r => r.json())
     .then(data => {
-      // set tokens
       accessToken = data.access_token;
-      // refreshToken = data.refresh_token;
-      // calc & set time to refresh
-      // let now = new Date()
-      // expiration = now.setSeconds(now.getSeconds() + data.expires_in);
-    })
-    .then(async () => {
-      await fetchUserProfile();
-      await fetchUserLibrary();
+      localStorage.setItem("access_token", accessToken);
+      return accessToken;
     })
     .catch(error => console.log(error))
   }
@@ -64,10 +61,10 @@ function App() {
     .then(data => {return data});
   }
 
-  function fetchAudioFeaturesForLibrary () {
-    fetch("http://localhost:3001/songs")
+  async function fetchAudioFeaturesForLibrary () {
+    await fetch("http://localhost:3001/songs")
     .then(r => r.json())
-    .then(async(library) => {
+    .then(async (library) => {
       await library.forEach(async (song) => {
         if (!song.audio_features) {
           const audioFeatures = await fetchAudioFeatures(song.id);
@@ -75,8 +72,7 @@ function App() {
             ...song,
             "audio_features": {...audioFeatures}
           }
-          const updatedSong = await patchSongOnLocal(patchSong);
-          // console.log(updatedSong);
+          await patchSongOnLocal(patchSong);
         }
       })
     })
@@ -169,7 +165,8 @@ function App() {
       })
     });
     likedSongsAry = parseSpotifyTracksAry(likedSongsAry);
-    postSongsAryToLocal(likedSongsAry);
+    await postSongsAryToLocal(likedSongsAry);
+    return true;
   }
 
   async function fetchUserPlaylists () {
@@ -184,7 +181,8 @@ function App() {
     let allTracksAry = await fetchTracksForPlaylistAry(playlistsAry);
     allTracksAry = parseSpotifyTracksAry(allTracksAry);
 
-    postSongsAryToLocal(allTracksAry);
+    await postSongsAryToLocal(allTracksAry);
+    return true;
   }
 
   async function fetchUserProfile () {
@@ -198,8 +196,16 @@ function App() {
     .then(r => r.json())
     .then(profile => {
       userId = profile.id;
+      localStorage.setItem("user_id", profile.id);
+      localStorage.setItem("user_profile", JSON.stringify(profile));
       return profile;
     });
+  }
+
+  async function initApp () {
+    if (!accessToken) {await fetchAccessToken()}
+    await fetchUserProfile();
+    window.location.replace("http://localhost:3000/index.html");
   }
 
   function loadLocalSongIds () {
@@ -251,11 +257,12 @@ function App() {
     .then(patch => {return patch});
   }
 
-  function postSongsAryToLocal (songsAry) {
-    songsAry.forEach(song => {
+  async function postSongsAryToLocal (songsAry) {
+    await songsAry.forEach(song => {
       postSongToLocal(song);
       songIdAry.push(song.id);
     });
+    return true;
   }
 
   async function postSongToLocal (song) {
