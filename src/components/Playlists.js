@@ -4,7 +4,11 @@ import SongsList from './SongsList'
 
 function Playlists() {
   return (
-    <div>Playlists</div>
+    <div>
+      <h2>Playlists</h2>
+      <PlaylistMenu />
+      <SongsList />
+    </div>
   )
 }
 
