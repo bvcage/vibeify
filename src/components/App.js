@@ -294,8 +294,12 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className='container'>
       <header className="App-header">
+        <h1>Vibeify.</h1>
+        <br></br>
+        <h4>Create playlists based on your mood.</h4>
+        <br></br>
         <LoginButton onLogout={clearLocal} />
       </header>
     </div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Button from '@mui/material/Button'
 import { CLIENT_ID } from '../keys';
 
 function LoginButton ({ onLogout }) {
@@ -46,8 +47,11 @@ function LoginButton ({ onLogout }) {
     }
 
     return (
-        <button onClick={toggleLoginLogout}>{localStorage.getItem("user_id") ? 'logout': 'login'}</button>
+        <div>
+        <Button variant='contained' color='success' onClick={toggleLoginLogout}>{localStorage.getItem("user_id") ? 'logout': 'login with spotify'}</Button>
+        </div>
     )
+
 }
 
 export default LoginButton
