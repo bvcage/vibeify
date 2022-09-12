@@ -1,5 +1,8 @@
 import '../App.css';
 import React from 'react';
+import Home from './Home';
+import Login from './Login';
+import Main from './Main';
 import { useSearchParams } from 'react-router-dom';
 import LoginButton from './LoginButton';
 import { Base64 } from 'js-base64';
