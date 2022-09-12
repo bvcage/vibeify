@@ -1,10 +1,10 @@
 import '../App.css';
 import React from 'react';
+import { Routes, Route } from "react-router-dom";
 import Home from './Home';
 import Login from './Login';
 import Main from './Main';
 import { useSearchParams } from 'react-router-dom';
-import LoginButton from './LoginButton';
 import { Base64 } from 'js-base64';
 import { CLIENT_ID, CLIENT_SECRET } from '../keys';
 
@@ -26,21 +26,6 @@ function App() {
     console.log('please log in');
   }
 
-  function clearLocal () {
-    const url = 'http://localhost:3001/songs';
-    fetch(url)
-    .then(r => r.json())
-    .then(library => {
-      library.forEach(song => {
-        fetch(`${url}/${song.id}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          }
-        })
-      })
-    })
-  }
 
   function fetchAccessToken () {
     console.log('fetching access token ...');
@@ -224,7 +209,7 @@ function App() {
   async function initApp () {
     if (!accessToken) {await fetchAccessToken()}
     await fetchUserProfile();
-    window.location.replace("http://localhost:3000/index.html");
+    window.location.replace("http://localhost:3000/main");
   }
 
   function loadLocalSongIds () {
@@ -270,7 +255,7 @@ function App() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(patchSong),
+      body: JSON.stringify(patchSong)
     })
     .then(r => r.json())
     .then(patch => {return patch});
@@ -297,15 +282,11 @@ function App() {
   }
 
   return (
-    <div className='container'>
-      <header className="App-header">
-        <h1>Vibeify.</h1>
-        <br></br>
-        <h4>Create playlists based on your mood.</h4>
-        <br></br>
-        <LoginButton onLogout={clearLocal} />
-      </header>
-    </div>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path="login" element={<Login />} />
+        <Route path='main' element={<Main />} />
+      </Routes>
   );
 }
 

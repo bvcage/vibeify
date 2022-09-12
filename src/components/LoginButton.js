@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from '@mui/material/Button'
 import { CLIENT_ID } from '../keys';
 
-function LoginButton ({ onLogout }) {
+function LoginButton () {
 
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("user_id") !== null);
 
@@ -40,11 +40,29 @@ function LoginButton ({ onLogout }) {
     function toggleLoginLogout () {
         if (isLoggedIn) {
             localStorage.clear();
-            onLogout();
+            clearLocal();
         }
-        else authorizeApp()
+        else {
+        authorizeApp()
+        }
         setIsLoggedIn(!isLoggedIn);
     }
+
+    function clearLocal () {
+        const url = 'http://localhost:3001/songs';
+        fetch(url)
+        .then(r => r.json())
+        .then(library => {
+          library.forEach(song => {
+            fetch(`${url}/${song.id}`, {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              }
+            })
+          })
+        })
+      }
 
     return (
         <Button
