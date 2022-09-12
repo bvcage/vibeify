@@ -47,9 +47,12 @@ function LoginButton ({ onLogout }) {
     }
 
     return (
-        <div>
-        <Button variant='contained' color='success' onClick={toggleLoginLogout}>{localStorage.getItem("user_id") ? 'logout': 'login with spotify'}</Button>
-        </div>
+        <Button
+            variant='contained'
+            color='success'
+            onClick={toggleLoginLogout}
+            >{localStorage.getItem("user_id") ? 'logout': 'login with spotify'}
+        </Button>
     )
 
 }
