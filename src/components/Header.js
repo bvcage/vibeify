@@ -5,7 +5,10 @@ import Logo from './Logo'
 
 function Header() {
   return (
-    <div>Header</div>
+    <div className='header'>
+        <Logo />
+        <Nav />
+    </div>
   )
 }
 

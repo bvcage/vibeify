@@ -1,4 +1,5 @@
 import React from 'react'
+import '../App.css'
 import PlaylistMenu from './PlaylistMenu'
 import SongsList from './SongsList'
 
