@@ -1,4 +1,8 @@
 import React from 'react'
+import { Routes, Route } from 'react-router-dom'
+
+import LoadLibrary from './LoadLibrary'
+import Login from './Login'
 import LoginButton from './LoginButton'
 
 function Home() {
@@ -9,7 +13,11 @@ function Home() {
         <br></br>
         <h4>Create playlists based on your mood.</h4>
         <br></br>
-        <LoginButton />
+        <Routes>
+          <Route path="/" element={<LoginButton />} />
+          <Route path="login" element={<Login />} />
+          <Route path="loading" element={<LoadLibrary />} />
+        </Routes>
       </header>
     </div>
   )
