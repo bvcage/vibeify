@@ -1,10 +1,20 @@
-import { isDisabled } from "@testing-library/user-event/dist/utils";
-
+const PLAYLIST_LIMIT = 15;
 const PLAYLISTS_URL = "http://localhost:3001/playlists";
 const SONGS_URL = "http://localhost:3001/songs";
-const initPlaylist = {
-    "type": null,
-    "tracks": []
+
+export async function clearPlaylists () {
+    await fetch(PLAYLISTS_URL)
+        .then(r => r.json())
+        .then(list => {
+            list.forEach(playlist => {
+                fetch(`${PLAYLISTS_URL}/${playlist.id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+            })
+        })
 }
 
 export async function createDefaultPlaylists () {
@@ -19,40 +29,30 @@ export async function createDefaultPlaylists () {
             return tempAry;
         })
 
-    return fetch(SONGS_URL)
-    .then(r => r.json())
-    .then(library => {
-        library.forEach(song => {
-            // mood playlists
-            if (isHappy(song)) addToPlaylist("mood", "happy", song);
-            if (isSad(song)) addToPlaylist("mood", "sad", song);
+    if (!!playlistAry) {
+        return await fetch(SONGS_URL)
+        .then(r => r.json())
+        .then(library => {
+            library.forEach(song => {
+                // mood playlists
+                if (isHappy(song)) addToPlaylist("mood", "happy", song)
+                else if (isSad(song)) addToPlaylist("mood", "sad", song);
+            })
+            return playlistAry;
         })
-        return playlistAry;
-    })
+    } else return;
 
     function addToPlaylist (playlistType, playlistId, song) {
         const playlist = playlistAry.find(ele => ele.id === playlistId);
-        if (!!playlist && playlist.tracks.length < 15) {
-            const patchPlaylist = {...playlist,
-                "tracks": [...playlist.tracks, song]
-            }
-            fetch(`${PLAYLISTS_URL}/${playlist.id}`, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(patchPlaylist)
-            })
-            playlistAry = playlistAry.map(item => {
-                if (item.id === patchPlaylist.id) return patchPlaylist;
-                return item;
-            })
-        } else if (!playlist) {
+        if (!!playlist && playlist.tracks.length >= PLAYLIST_LIMIT) return null;
+
+        if (!playlist) {
             const newPlaylist = {
                 "id": playlistId,
                 "type": playlistType,
                 "tracks": [song]
             }
+            playlistAry.push(newPlaylist);
             fetch(PLAYLISTS_URL, {
                 method: "POST",
                 headers: {
@@ -60,15 +60,28 @@ export async function createDefaultPlaylists () {
                 },
                 body: JSON.stringify(newPlaylist)
             })
-            playlistAry.push(newPlaylist);
+        } else {
+            const patchPlaylist = {...playlist,
+                "tracks": [...playlist.tracks, song]
+            }
+            playlistAry = playlistAry.map(item => {
+                if (item.id === patchPlaylist.id) return patchPlaylist;
+                return item;
+            })
+            fetch(`${PLAYLISTS_URL}/${playlist.id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(patchPlaylist)
+            })
         }
-        return;
     }
 
     function isHappy (song) {
         const { valence } = song.audio_features;
         if (valence > 0.8) return true;
-        else return false;
+        return false;
     }
     
     function isSad (song) {
