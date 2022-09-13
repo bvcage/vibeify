@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import "../App.css";
 
 function LoadLibrary() {
 
@@ -62,7 +63,7 @@ function LoadLibrary() {
         return data;
     }
     
-      function fetchInfo (apiUrl) {
+    function fetchInfo (apiUrl) {
         const url = apiUrl + "?limit=1";
         return fetch (url, {
             headers: {
@@ -201,7 +202,7 @@ function LoadLibrary() {
         return true;
     }
     
-      async function postSongToLocal (song) {
+    async function postSongToLocal (song) {
         if (!songIdAry.find(ele => ele === song.id)) {
             await fetch(`http://localhost:3001/songs`, {
                 method: "POST",
@@ -216,7 +217,7 @@ function LoadLibrary() {
     fetchUserLibrary();
 
     return (
-        <div>Loading your library...</div>
+        <h2>Loading your library...</h2>
     )
 }
 
