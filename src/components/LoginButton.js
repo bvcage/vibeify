@@ -27,9 +27,9 @@ function LoginButton () {
         }, 100);
     }
 
-    function clearLocalDB () {
+    async function clearLocalDB () {
         const url = 'http://localhost:3001/songs';
-        fetch(url)
+        return await fetch(url)
         .then(r => r.json())
         .then(library => {
             library.forEach(song => {
@@ -57,7 +57,6 @@ function LoginButton () {
         if (isLoggedIn) {
             localStorage.clear();
             clearLocalDB();
-            window.location.replace('http://localhost:3000')
         }
         else {
             authorizeApp();
