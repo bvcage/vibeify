@@ -47,11 +47,11 @@ function Nav() {
         <div className='login'>
             <UserButton>
                 <div className='avatar'>
-            <LoginButton />        
             <Avatar src={userData.images[0].url}/>
                 </div>
             <h3>{userData.display_name}</h3>
             </UserButton>
+            <LoginButton />        
         </div>
     </div>
     </div>
