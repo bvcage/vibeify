@@ -11,7 +11,7 @@ function LoginButton () {
             response_type: "code",
             client_id: CLIENT_ID,
             scope: "user-library-read playlist-read-private",
-            redirect_uri: "http://localhost:3000/login",
+            redirect_uri: "http://localhost:3000/home/login",
             state: genRandomString(20),
             // code_challenge_method: "S256",
             // code_challenge: "",
