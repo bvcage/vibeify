@@ -1,35 +1,39 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../App.css'
 import PlaylistMenu from './PlaylistMenu'
 import SongsList from './SongsList'
-import { createMoodPlaylists } from '../scripts/createPlaylists';
+import { createDefaultPlaylists } from '../scripts/createPlaylists';
 
 function Playlists() {
 
-  const [fullSongIdAry, setFullSongIdAry] = useState(loadSongsFromDB);
+  // const [fullSongIdAry, setFullSongIdAry] = useState(loadSongsFromDB);
   // const [selectedPlaylist, setSelectedPlaylist] = useState('');
-  const [songsToDisplay, setSongsToDisplay] = useState([]);
+  // const [songsToDisplay, setSongsToDisplay] = useState([]);
+  const [playlistAry, setPlaylistAry] = useState([]);
 
-  createMoodPlaylists();
+  useEffect(() => {
+    createDefaultPlaylists().then(data => setPlaylistAry(data))
+  }, []);
 
-  function loadSongsFromDB() {
-    fetch(`http://localhost:3001/songs`)
-      .then(r => r.json())
-      .then(library => {
-        let tempAry = [];
-        library.forEach(song => tempAry.push(song))
-        setFullSongIdAry(tempAry);
-        setSongsToDisplay(tempAry);
-      })
-  }
+  console.log(playlistAry);
 
-  console.log(fullSongIdAry);
+  // function loadSongsFromDB() {
+  //   fetch(`http://localhost:3001/songs`)
+  //     .then(r => r.json())
+  //     .then(library => {
+  //       let tempAry = [];
+  //       library.forEach(song => tempAry.push(song))
+  //       setFullSongIdAry(tempAry);
+  //       setSongsToDisplay(tempAry);
+  //     })
+  // }
+
+  // console.log(fullSongIdAry);
 
   return (
     <div>
-      <h2>Playlists</h2>
-      <PlaylistMenu />
-      <SongsList songs={songsToDisplay} />
+      <PlaylistMenu playlistAry={playlistAry} />
+      <SongsList />
     </div>
   )
 }
