@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import '../App.css'
 import PlaylistMenu from './PlaylistMenu'
 import SongsList from './SongsList'
-import { createDefaultPlaylists } from '../scripts/createPlaylists';
+import { clearPlaylists, createDefaultPlaylists } from '../scripts/createPlaylists';
 
 function Playlists() {
 
@@ -10,7 +10,9 @@ function Playlists() {
   const [songsAry, setSongsAry] = useState([]);
 
   useEffect(() => {
-    createDefaultPlaylists().then(data => setPlaylistAry(data))
+    clearPlaylists()
+    .then(createDefaultPlaylists)
+    .then(data => setPlaylistAry(data))
   }, []);
 
   function onClickPlaylist (playlist) {
