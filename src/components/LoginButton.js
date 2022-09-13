@@ -57,6 +57,7 @@ function LoginButton () {
         if (isLoggedIn) {
             localStorage.clear();
             clearLocalDB();
+            window.location.replace('http://localhost:3000')
         }
         else {
             authorizeApp();

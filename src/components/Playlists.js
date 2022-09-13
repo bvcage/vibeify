@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import '../App.css'
 import PlaylistMenu from './PlaylistMenu'
 import SongsList from './SongsList'
 import { createMoodPlaylists } from '../scripts/createPlaylists';
@@ -6,7 +7,7 @@ import { createMoodPlaylists } from '../scripts/createPlaylists';
 function Playlists() {
 
   const [fullSongIdAry, setFullSongIdAry] = useState(loadSongsFromDB);
-  const [selectedPlaylist, setSelectedPlaylist] = useState('');
+  // const [selectedPlaylist, setSelectedPlaylist] = useState('');
   const [songsToDisplay, setSongsToDisplay] = useState([]);
 
   createMoodPlaylists();
@@ -18,8 +19,11 @@ function Playlists() {
         let tempAry = [];
         library.forEach(song => tempAry.push(song))
         setFullSongIdAry(tempAry);
+        setSongsToDisplay(tempAry);
       })
   }
+
+  console.log(fullSongIdAry);
 
   return (
     <div>
