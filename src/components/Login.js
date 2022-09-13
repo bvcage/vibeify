@@ -12,7 +12,7 @@ function Login() {
     console.log('initializing ...');
     initApp();
   } else if (!!accessToken) {
-    // go to loading screen
+    window.location.replace("http://localhost:3000/loading");
   } else {
     console.log('please log in');
   }
