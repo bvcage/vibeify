@@ -2,20 +2,22 @@ import React from 'react'
 import SongCard from './SongCard'
 import Filters from './Filters'
 import SpeedDial from './SpeedDial'
-import { Container } from '@mui/material'
+import { Grid } from '@mui/material'
 
 function SongsList({ songsAry }) {
 
   const songs = songsAry.map(song => {
     return (
-      <SongCard key={song.id} song={song} />
+      <Grid item xs={4}>
+        <SongCard key={song.id} song={song} />
+      </Grid>
     )
   })
 
   return (
-    <Container maxWidth="md">
+    <Grid container spacing={2}>
       {songs}
-    </Container>
+    </Grid>
   )
 }
 
