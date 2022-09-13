@@ -4,7 +4,7 @@ import { Card } from '@mui/material'
 function SongCard({ song }) {
   const { name, album, artists } = song;
   return (
-    <Card>
+    <Card sx={{ maxWidth: 345 }}>
       {name}
       <br />
       {album.name}
