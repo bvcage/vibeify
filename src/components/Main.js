@@ -6,15 +6,19 @@ import About from './About'
 import Footer from './Footer'
 import Playlists from './Playlists'
 
+import { Container } from '@mui/material'
+
 function Main() {
   return (
     <>
     <div className='container'>
         <Header />
-        <Routes>
-          <Route path="about" element={<About />} />
-          <Route path="playlists" element={<Playlists />} />
-        </Routes>
+        <Container maxWidth="md">
+          <Routes>
+            <Route path="about" element={<About />} />
+            <Route path="playlists" element={<Playlists />} />
+          </Routes>
+        </Container>
         <Footer />
     </div>
     </>
