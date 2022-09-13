@@ -1,4 +1,17 @@
 {
-  "songs": [],
-  "playlists": []
+  "playlists": {
+    "mood": {
+      "angry": [],
+      "happy": [],
+      "sad": []
+    },
+    "activity": {
+      "cleaning": [],
+      "meditation": [],
+      "running": [],
+      "studying": []
+    },
+    "similar": {}
+  },
+  "songs": []
 }
