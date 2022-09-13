@@ -8,7 +8,7 @@ function SongsList({ songsAry }) {
 
   const songs = songsAry.map(song => {
     return (
-      <SongCard key={song} song={song} />
+      <SongCard key={song.id} song={song} />
     )
   })
 

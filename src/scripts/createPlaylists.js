@@ -24,17 +24,17 @@ export async function createDefaultPlaylists () {
     .then(library => {
         library.forEach(song => {
             // mood playlists
-            if (isHappy(song)) addToPlaylist("mood", "happy", song.id);
-            if (isSad(song)) addToPlaylist("mood", "sad", song.id);
+            if (isHappy(song)) addToPlaylist("mood", "happy", song);
+            if (isSad(song)) addToPlaylist("mood", "sad", song);
         })
         return playlistAry;
     })
 
-    function addToPlaylist (playlistType, playlistId, songId) {
+    function addToPlaylist (playlistType, playlistId, song) {
         const playlist = playlistAry.find(ele => ele.id === playlistId);
         if (!!playlist && playlist.tracks.length < 15) {
             const patchPlaylist = {...playlist,
-                "tracks": [...playlist.tracks, songId]
+                "tracks": [...playlist.tracks, song]
             }
             fetch(`${PLAYLISTS_URL}/${playlist.id}`, {
                 method: "PATCH",
@@ -51,7 +51,7 @@ export async function createDefaultPlaylists () {
             const newPlaylist = {
                 "id": playlistId,
                 "type": playlistType,
-                "tracks": [songId]
+                "tracks": [song]
             }
             fetch(PLAYLISTS_URL, {
                 method: "POST",

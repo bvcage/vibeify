@@ -4,7 +4,7 @@ import { Card } from '@mui/material'
 function SongCard({ song }) {
   return (
     <Card>
-      {song}
+      {song.name}
     </Card>
   )
 }
