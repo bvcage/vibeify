@@ -4,6 +4,8 @@ import PlaylistMenu from './PlaylistMenu'
 import SongsList from './SongsList'
 import { clearPlaylists, createDefaultPlaylists } from '../scripts/createPlaylists';
 
+import { Box, Stack } from '@mui/material';
+
 function Playlists() {
 
   const [playlistAry, setPlaylistAry] = useState([]);
@@ -20,10 +22,14 @@ function Playlists() {
   }
 
   return (
-    <div>
-      <PlaylistMenu playlistAry={playlistAry} onClickPlaylist={onClickPlaylist} />
-      <SongsList songsAry={songsAry}/>
-    </div>
+    <Stack spacing={2}>
+      <Box>
+        <PlaylistMenu playlistAry={playlistAry} onClickPlaylist={onClickPlaylist} />
+      </Box>
+      <Box>
+        <SongsList songsAry={songsAry}/>
+      </Box>
+    </Stack>
   )
 }
 
