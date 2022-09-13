@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import PlaylistMenu from './PlaylistMenu'
 import SongsList from './SongsList'
+import { createMoodPlaylists } from '../scripts/createPlaylists';
 
 function Playlists() {
 
   const [fullSongIdAry, setFullSongIdAry] = useState(loadSongsFromDB);
   const [selectedPlaylist, setSelectedPlaylist] = useState('');
   const [songsToDisplay, setSongsToDisplay] = useState([]);
+
+  createMoodPlaylists();
 
   function loadSongsFromDB() {
     fetch(`http://localhost:3001/songs`)
