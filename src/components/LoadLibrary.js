@@ -10,7 +10,7 @@ function LoadLibrary() {
     const checkDone = setInterval(() => {
         if (!done) return;
         clearInterval(checkDone);
-        window.location.replace("http://localhost:3000/main");
+        window.location.replace("http://localhost:3000/main/playlists");
     }, 1000);
 
     return (
