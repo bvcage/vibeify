@@ -1,3 +1,5 @@
+import noAlbumArt from '../No-album-art.png'
+
 export function getSpotifyLibrary () {
 
     console.log('getting spotify library...');
@@ -133,10 +135,9 @@ export function getSpotifyLibrary () {
         let playlistsAry = [];
         dataAry.forEach(entry => playlistsAry.push(...(entry.items)));
         playlistsAry = playlistsAry.filter(playlist => playlist.owner.id === userId);
-    
         let allTracksAry = await fetchTracksForPlaylistAry(playlistsAry);
+        
         allTracksAry = parseSpotifyTracksAry(allTracksAry);
-    
         await postSongsAryToLocal(allTracksAry);
         return true;
     }
@@ -152,12 +153,21 @@ export function getSpotifyLibrary () {
     function parseSpotifyTracksAry (tracksAry) {
         const songsAry = [];
         tracksAry.forEach(track => {
-            const albumEntry = {
-                "id": track.album.id,
-                "name": track.album.name,
-                "url": track.album.external_urls.spotify,
-                "imageUrl": track.album.images[0].url,
+                let albumEntry = {
+                'id': null,
+                'name': track.album.name,
+                'url': null,
+                'imageUrl': [noAlbumArt]
+                }
+
+                if (!track.is_local) {
+                albumEntry = {...albumEntry,
+                    'id': track.album.id,
+                    'url': track.album.external_urls.spotify,
+                    'imageUrl': track.album.images[0].url
+                }
             }
+
             const artistsAry = track.artists.map(artist => {
                 return {
                     "id": artist.id,
