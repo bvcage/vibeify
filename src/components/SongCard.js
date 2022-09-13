@@ -1,8 +1,11 @@
 import React from 'react'
+import { Card } from '@mui/material'
 
-function SongCard() {
+function SongCard({ song }) {
   return (
-    <div>SongCard</div>
+    <Card>
+      {song}
+    </Card>
   )
 }
 

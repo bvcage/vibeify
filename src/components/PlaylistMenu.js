@@ -1,25 +1,20 @@
 import React, { useState } from 'react'
 import GetSimilarForm from './GetSimilarForm'
 import PlaylistCard from './PlaylistCard'
+import { Container } from '@mui/material'
 
-function PlaylistMenu() {
+function PlaylistMenu({ playlistAry, onClickPlaylist }) {
 
-  const [playlistAry, setPlaylistAry] = useState(loadPlaylistsFromDB);
-
-  function loadPlaylistsFromDB() {
-    fetch(`http://localhost:3001/playlists`)
-      .then(r => r.json())
-      .then(playlists => {
-        let tempAry = [];
-        playlists.forEach(list => tempAry.push(list))
-        setPlaylistAry([...tempAry]);
-      })
-  }
+  const playlists = playlistAry.map(playlist => {
+    return (
+      <PlaylistCard key={playlist.id} playlist={playlist} onClickPlaylist={onClickPlaylist} />
+    )
+  })
 
   return (
-    <div>
-      <h2>PlaylistMenu</h2>
-    </div>
+    <Container maxWidth="md" >
+      {playlists}
+    </Container>
   )
 }
 
