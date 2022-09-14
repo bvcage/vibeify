@@ -1,36 +1,43 @@
 import React from 'react'
-import { Card, Grid } from '@mui/material'
+import { Card, CardContent, CardMedia, Typography } from '@mui/material'
 import "../App.css"
 
-function SongCard({ song }) {
-  const { name, album, artists, url } = song;
+
+function SongCard({ song, onClickDelete }) {
+
+  const { id, name, album, artists, url } = song;
+
+  function handleRemoveSong () {
+    onClickDelete(id);
+  }
+
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 400, display: 'flex' }}>
 
-      <Grid
-        container
-        direction="row"
-        alignItems="center"
-      >
+      <CardMedia
+        component="img"
+        sx={{ width: 120, height: 120 }}
+        image={album.imageUrl}
+        alt={album.name + " album art"}
+      />
 
-        <Grid item xs>
-          <img className="album-art" src={album.imageUrl} alt={'album art'} />
-        </Grid>
-
-        <Grid item xs>
-          <a
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            >{name}
-          </a>
-          <br />
+      <CardContent sx={{display: 'flex', flexDirection: 'column'}}>
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          >{name}
+        </a>
+        <Typography noWrap>
           {album.name}
-          <br />
+        </Typography>
+        <Typography noWrap>
           {artists.map(artist => artist.name).join(", ")}
-        </Grid>
-        
-      </Grid>
+        </Typography>
+        <div className="trash-can" onClick={handleRemoveSong}>🗑</div>
+      </CardContent>
+
+      
 
     </Card>
   )
