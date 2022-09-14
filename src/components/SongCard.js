@@ -38,7 +38,9 @@ function SongCard({ song, onClickDelete }) {
         <Typography noWrap>
           {artists.map(artist => artist.name).join(", ")}
         </Typography>
-        <div className="trash-can" onClick={handleRemoveSong}>🗑</div>
+        <div className="trash-can">
+          <span onClick={handleRemoveSong}>🗑</span>
+        </div>
       </CardContent>
 
     </Card>
