@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Button from '@mui/material/Button'
+import Button from '@mui/material/Button';
 import { CLIENT_ID } from '../keys';
 import { clearDB } from '../scripts/localDB.js'
 
