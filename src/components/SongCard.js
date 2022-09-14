@@ -37,8 +37,6 @@ function SongCard({ song, onClickDelete }) {
         <div className="trash-can" onClick={handleRemoveSong}>🗑</div>
       </CardContent>
 
-      
-
     </Card>
   )
 }
