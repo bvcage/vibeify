@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button'
 import { CLIENT_ID } from '../keys';
+import { clearDB } from '../scripts/localDB.js'
 
 function LoginButton () {
 
@@ -27,22 +28,6 @@ function LoginButton () {
         }, 100);
     }
 
-    async function clearLocalDB () {
-        const url = 'http://localhost:3001/songs';
-        return await fetch(url)
-        .then(r => r.json())
-        .then(library => {
-            library.forEach(song => {
-                fetch(`${url}/${song.id}`, {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json",
-                    }
-                })
-            })
-        })
-    }
-
     function genRandomString(length) {
         const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const numPossible = possible.length;
@@ -56,7 +41,7 @@ function LoginButton () {
     function toggleLoginLogout () {
         if (isLoggedIn) {
             localStorage.clear();
-            clearLocalDB();
+            clearDB();
         }
         else {
             authorizeApp();
