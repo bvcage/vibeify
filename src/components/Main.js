@@ -13,7 +13,7 @@ function Main() {
     <>
     <div className='container'>
         <Header />
-        <Container maxWidth="md">
+        <Container maxWidth="lg">
           <Routes>
             <Route path="about" element={<About />} />
             <Route path="playlists" element={<Playlists />} />
