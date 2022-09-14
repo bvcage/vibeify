@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import GetSimilarForm from './GetSimilarForm'
 import PlaylistCard from './PlaylistCard'
 import { Container } from '@mui/material'
+import SearchBar from './SearchBar'
 
 function PlaylistMenu({ playlistAry, onClickPlaylist }) {
 
@@ -14,6 +15,7 @@ function PlaylistMenu({ playlistAry, onClickPlaylist }) {
   return (
     <Container maxWidth="md" >
       {playlists}
+      <SearchBar playlistAry={playlistAry} />
     </Container>
   )
 }
