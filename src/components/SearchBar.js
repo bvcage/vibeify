@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button'
 
-function SearchBar() {
+function SearchBar({ onClickAdd }) {
 
     const [songs, setSongs] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
@@ -34,7 +35,7 @@ function SearchBar() {
   return (
     <Box
       sx={{
-        width: 852,
+        width: 1300,
         maxWidth: '100%',
         paddingTop: '12px'
       }}
@@ -44,9 +45,9 @@ function SearchBar() {
     </div>
     {filterSongList.length != 0 && (
         <div>
-            {filterSongList.slice(0, 10).map((value, key) => {
+            {filterSongList.slice(0, 10).map((value) => {
                 return (
-                    <p>{value.name} - {value.artists[0].name}</p>
+                    <p><Button onClick={() => onClickAdd(value)}>+ Add</Button>{value.name} - {value.artists[0].name}</p>
                 )
             })}
         </div>
