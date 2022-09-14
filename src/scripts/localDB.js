@@ -1,6 +1,21 @@
 const PLAYLIST_URL = "http://localhost:3001/playlists";
 const SONGS_URL = "http://localhost:3001/songs";
 
+export function addSongToPlaylist (playlist, song) {
+    const newSongAry = [...playlist.tracks, song];
+    const patchPlaylist = {...playlist,
+        "tracks": newSongAry
+    }
+    fetch(`${PLAYLIST_URL}/${playlist.id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(patchPlaylist),
+    })
+    return newSongAry;
+}
+
 export function clearDB () {
     fetch(PLAYLIST_URL)
     .then(r => r.json())

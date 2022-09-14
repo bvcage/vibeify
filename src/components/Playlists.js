@@ -3,7 +3,7 @@ import '../App.css'
 import PlaylistMenu from './PlaylistMenu'
 import SongsList from './SongsList'
 import { clearPlaylists, createDefaultPlaylists } from '../scripts/createPlaylists';
-import { removeSongFromPlaylist } from '../scripts/localDB';
+import { addSongToPlaylist, removeSongFromPlaylist } from '../scripts/localDB';
 
 import { Box, Stack } from '@mui/material';
 import SearchBar from './SearchBar';
@@ -39,7 +39,7 @@ function Playlists() {
   }
 
   function onClickAdd (song) {
-    const newSongsAry = [...songsAry, song]
+    const newSongsAry = addSongToPlaylist(selectedPlaylist, song);
     const newSongPlaylist = {...selectedPlaylist,
       "tracks": newSongsAry
     }
