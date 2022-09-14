@@ -2,9 +2,13 @@ import React from 'react'
 import SongCard from './SongCard'
 import Filters from './Filters'
 import SpeedDial from './SpeedDial'
-import { Grid } from '@mui/material'
+import { Button, Card, Grid } from '@mui/material'
 
 function SongsList({ songsAry, onClickDelete }) {
+
+  function handleClickAddSong (event) {
+    console.log('add song');
+  }
 
   const songs = songsAry.map(song => {
     return (
@@ -14,9 +18,28 @@ function SongsList({ songsAry, onClickDelete }) {
     )
   })
 
+  const addSongBtn = (
+    <Grid item xs={4}>
+      <Card sx={{
+        display: "flex",
+        height: 120,
+        alignItems: "center",
+        justifyContent: "center"
+      }}>
+        <Button
+          fullWidth
+          onClick={handleClickAddSong}
+          sx={{height: '100%'}}
+          >➕ add song
+        </Button>
+      </Card>
+    </Grid>
+  )
+
   return (
     <Grid container spacing={2}>
       {songs}
+      {songs.length > 0 ? addSongBtn : null}
     </Grid>
   )
 }
