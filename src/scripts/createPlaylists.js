@@ -82,8 +82,10 @@ export async function createDefaultPlaylists () {
     }
 
     function isHappy (song) {
-        const { valence } = song.audio_features;
-        if (valence > 0.8) return true;
+        const { energy, loudness, valence } = song.audio_features;
+        if (valence > 0.8
+            && energy > 0.7
+            && loudness > -6) return true;
         return false;
     }
     
