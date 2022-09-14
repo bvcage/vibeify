@@ -11,8 +11,12 @@ function SongCard({ song, onClickDelete }) {
     onClickDelete(id);
   }
 
+  function showSongDetails () {   // for testing purposes
+    console.log(song.audio_features);
+  }
+
   return (
-    <Card sx={{ maxWidth: 400, display: 'flex' }}>
+    <Card sx={{ maxWidth: 400, display: 'flex' }} onClick={showSongDetails}>
 
       <CardMedia
         component="img"
