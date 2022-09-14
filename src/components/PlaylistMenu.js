@@ -15,7 +15,7 @@ function PlaylistMenu({ playlistAry, onClickPlaylist }) {
   return (
     <Container maxWidth="md" >
       {playlists}
-      <SearchBar playlistAry={playlistAry} />
+      <SearchBar />
     </Container>
   )
 }
