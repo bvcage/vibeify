@@ -44,7 +44,10 @@ export async function createDefaultPlaylists () {
 
     function addToPlaylist (playlistType, playlistId, song) {
         const playlist = playlistAry.find(ele => ele.id === playlistId);
-        if (!!playlist && playlist.tracks.length >= PLAYLIST_LIMIT) return null;
+        if (!!playlist) {
+            if (playlist.tracks.length >= PLAYLIST_LIMIT) return;   // limit # of songs on default playlist
+            if (playlist.tracks.find(ele => ele.album.name === song.album.name)) return; // limit default playlist to 1 song per album
+        }
 
         if (!playlist) {
             const newPlaylist = {
@@ -79,14 +82,16 @@ export async function createDefaultPlaylists () {
     }
 
     function isHappy (song) {
-        const { valence } = song.audio_features;
-        if (valence > 0.8) return true;
+        const { energy, loudness, valence } = song.audio_features;
+        if (valence > 0.8
+            && energy > 0.7
+            && loudness > -6) return true;
         return false;
     }
     
     function isSad (song) {
-        const { valence } = song.audio_features;
-        if (valence < 0.2) return true;
+        const { energy, valence } = song.audio_features;
+        if (valence < 0.2 && energy < 0.4) return true;
         return false;
     }
 }

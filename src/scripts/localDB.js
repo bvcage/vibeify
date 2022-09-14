@@ -1,4 +1,32 @@
-const PLAYLIST_URL = "http://localhost:3000/playlists"
+const PLAYLIST_URL = "http://localhost:3001/playlists";
+const SONGS_URL = "http://localhost:3001/songs";
+
+export function clearDB () {
+    fetch(PLAYLIST_URL)
+    .then(r => r.json())
+    .then(list => {
+        list.forEach(playlist => {
+            fetch(`${PLAYLIST_URL}/${playlist.id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+        })
+    })
+    fetch(SONGS_URL)
+    .then(r => r.json())
+    .then(library => {
+        library.forEach(song => {
+            fetch(`${SONGS_URL}/${song.id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+        })
+    })
+}
 
 export function loadLocalSongIds () {
     let songIdAry = [];

@@ -6,6 +6,7 @@ import { clearPlaylists, createDefaultPlaylists } from '../scripts/createPlaylis
 import { removeSongFromPlaylist } from '../scripts/localDB';
 
 import { Box, Stack } from '@mui/material';
+import SearchBar from './SearchBar';
 
 function Playlists() {
 
@@ -37,10 +38,24 @@ function Playlists() {
     setSongsAry(playlist.tracks);
   }
 
+  function onClickAdd (song) {
+    const newSongsAry = [...songsAry, song]
+    const newSongPlaylist = {...selectedPlaylist,
+      "tracks": newSongsAry
+    }
+    setPlaylistAry(playlistAry.map(list => {
+      if (list.id === newSongPlaylist.id) return newSongPlaylist;
+      return list;
+    }))
+    setSelectedPlaylist(newSongPlaylist)
+    setSongsAry(newSongsAry)
+  };
+
   return (
     <Stack spacing={2}>
       <Box>
         <PlaylistMenu playlistAry={playlistAry} onClickPlaylist={onClickPlaylist} />
+        <SearchBar onClickAdd={onClickAdd} />
       </Box>
       <Box>
         <SongsList songsAry={songsAry} onClickDelete={onClickDelete} />
