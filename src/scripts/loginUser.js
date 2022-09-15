@@ -68,7 +68,7 @@ export function loginUser (code) {
                         songs: [],
                     })
                 })
-            }
+            } else {return profile}
         })
     }
 
