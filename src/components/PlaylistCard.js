@@ -1,8 +1,16 @@
 import React from 'react'
+import Card from '@mui/material/Card'
 
-function PlaylistCard() {
+function PlaylistCard({ playlist, onClickPlaylist }) {
+
+  function handleClick () {
+    onClickPlaylist(playlist);
+  }
+
   return (
-    <div>PlaylistCard</div>
+    <Card onClick={handleClick}>
+      {playlist.id}
+    </Card>
   )
 }
 

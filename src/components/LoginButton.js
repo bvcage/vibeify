@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import { CLIENT_ID } from '../keys';
+import { clearDB } from '../scripts/localDB.js'
 
 function LoginButton () {
 
@@ -11,7 +12,7 @@ function LoginButton () {
             response_type: "code",
             client_id: CLIENT_ID,
             scope: "user-library-read playlist-read-private",
-            redirect_uri: "http://localhost:3000/index.html",
+            redirect_uri: "http://localhost:3000/home/login",
             state: genRandomString(20),
             // code_challenge_method: "S256",
             // code_challenge: "",
@@ -20,7 +21,7 @@ function LoginButton () {
         let url = `https://accounts.spotify.com/authorize?` + query;
         const loginPopup = window.open(url, 'popup', 'menubar=no,width=600,height=925');
         const checkPopup = setInterval(() => {
-            if (loginPopup.window.location.href.includes("http://localhost:3000/index.html")) loginPopup.close();
+            if (loginPopup.window.location.href.includes("http://localhost:3000")) loginPopup.close();
             if (!loginPopup || !loginPopup.closed) return;
             clearInterval(checkPopup);
             console.log('login:', loginPopup.window.location.href);
@@ -41,29 +42,13 @@ function LoginButton () {
     function toggleLoginLogout () {
         if (isLoggedIn) {
             localStorage.clear();
-            clearLocal();
+            clearDB();
         }
         else {
-        authorizeApp()
+            authorizeApp();
         }
         setIsLoggedIn(!isLoggedIn);
     }
-
-    function clearLocal () {
-        const url = 'http://localhost:3001/songs';
-        fetch(url)
-        .then(r => r.json())
-        .then(library => {
-          library.forEach(song => {
-            fetch(`${url}/${song.id}`, {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-              }
-            })
-          })
-        })
-      }
 
     return (
         <Button

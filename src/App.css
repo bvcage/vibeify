@@ -49,3 +49,27 @@
   0% {background-position: 0%}
   100% {background-position: 100%}
 }
+
+
+.title {
+  color: white
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.login {
+  color: white;
+  padding-right: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar {
+  padding-right: 8px;
+}
