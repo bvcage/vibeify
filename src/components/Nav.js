@@ -35,19 +35,19 @@ function Nav() {
 
   return (
     <div style={{ display: 'flex', gap: '8px', }}>
-        <Box
-          sx={{
-            display: 'flex',
-              '& > *': {
-                m: 2,
-              },
-          }}
-        >
+      <Box
+        sx={{
+          display: 'flex',
+            '& > *': {
+              m: 2,
+            },
+        }}
+      >
         <ButtonGroup
           variant="text"
           aria-label="text button group"
           sx={{  '& button': {color: 'white' }}}
-          >
+        >
           <Button sx={{textTransform: 'none'}} onClick={onClickPlaylists}>Playlists</Button>
           <Button sx={{textTransform: 'none'}} onClick={onClickAbout}>About</Button>
           <Button
