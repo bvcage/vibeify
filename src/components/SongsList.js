@@ -12,14 +12,14 @@ function SongsList({ songsAry, onClickDelete }) {
 
   const songs = songsAry.map(song => {
     return (
-      <Grid item xs={4}>
+      <Grid item xs={4} key={song.id} >
         <SongCard key={song.id} song={song} onClickDelete={onClickDelete} />
       </Grid>
     )
   })
 
   const addSongBtn = (
-    <Grid item xs={4}>
+    <Grid item xs={4} key='add-btn' >
       <Card sx={{
         display: "flex",
         height: 120,

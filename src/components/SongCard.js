@@ -18,7 +18,7 @@ function SongCard({ song, onClickDelete }) {
   }
 
   return (
-    <Card raised='true' sx={{ maxWidth: 400, maxHeight: 120, display: 'flex', backgroundColor: 'rgba(0, 0, 0, 0.6)'}} onClick={showSongDetails}>
+    <Card raised={true} sx={{ maxWidth: 400, maxHeight: 120, display: 'flex', backgroundColor: 'rgba(0, 0, 0, 0.6)'}} onClick={showSongDetails}>
 
       <CardMedia
         component="img"

@@ -8,8 +8,8 @@ function PlaylistMenu({ playlistAry, onClickPlaylist }) {
 
   const playlists = playlistAry.map(playlist => {
     return (
-      <Grid item xs={2} >
-      <PlaylistCard key={playlist.id} playlist={playlist} onClickPlaylist={onClickPlaylist} />
+      <Grid item xs={2} key={playlist.id} >
+        <PlaylistCard key={playlist.id} playlist={playlist} onClickPlaylist={onClickPlaylist} />
       </Grid>
     )
   })
