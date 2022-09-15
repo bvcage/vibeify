@@ -24,6 +24,7 @@ function LoginButton () {
             if (loginPopup.window.location.href.includes("http://localhost:3000")) loginPopup.close();
             if (!loginPopup || !loginPopup.closed) return;
             clearInterval(checkPopup);
+            console.log('login:', loginPopup.window.location.href);
             window.location.href = loginPopup.window.location.href;
         }, 100);
     }
@@ -40,13 +41,17 @@ function LoginButton () {
 
     function toggleLoginLogout () {
         if (isLoggedIn) {
-            localStorage.clear();
-            clearDB();
+            clearDB()
+            .then(() => {
+                localStorage.clear();
+                setIsLoggedIn(!isLoggedIn);
+                window.location.replace("http://localhost:3000")
+            })
         }
         else {
             authorizeApp();
+            setIsLoggedIn(!isLoggedIn);
         }
-        setIsLoggedIn(!isLoggedIn);
     }
 
     return (

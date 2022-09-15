@@ -1,10 +1,12 @@
 import React from 'react'
-import { Card, CardContent, CardMedia, Typography } from '@mui/material'
+import Link from '@mui/material/Link'
+import { red } from '@mui/material/colors'
+import { Card, CardContent, CardMedia, Typography, IconButton } from '@mui/material'
 import "../App.css"
 
 
 function SongCard({ song, onClickDelete }) {
-
+  const primary = red[50]
   const { id, name, album, artists, url } = song;
 
   function handleRemoveSong () {
@@ -16,7 +18,7 @@ function SongCard({ song, onClickDelete }) {
   }
 
   return (
-    <Card sx={{ maxWidth: 400, display: 'flex' }} onClick={showSongDetails}>
+    <Card raised={true} sx={{ maxWidth: 400, maxHeight: 120, display: 'flex', backgroundColor: 'rgba(0, 0, 0, 0.6)'}} onClick={showSongDetails}>
 
       <CardMedia
         component="img"
@@ -25,22 +27,24 @@ function SongCard({ song, onClickDelete }) {
         alt={album.name + " album art"}
       />
 
-      <CardContent sx={{display: 'flex', flexDirection: 'column'}}>
-        <a
+      <CardContent sx={{display: 'flex', flexDirection: 'column', width: 370, }}>
+        <Link
           href={url}
           target="_blank"
           rel="noopener noreferrer"
+          color={primary}
           >{name}
-        </a>
-        <Typography noWrap>
+        </Link>
+        <Typography variant='body2' sx={{maxWidth: 200, color: 'white'}}>
           {album.name}
         </Typography>
-        <Typography noWrap>
+        <Typography variant='body1' sx={{color: 'white'}}>
           {artists.map(artist => artist.name).join(", ")}
         </Typography>
-        <div className="trash-can" onClick={handleRemoveSong}>🗑</div>
       </CardContent>
-
+        <div className='deleteDiv'>
+        <IconButton size='small' onClick={handleRemoveSong}>🗑</IconButton>
+        </div>
     </Card>
   )
 }

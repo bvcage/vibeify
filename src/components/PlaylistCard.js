@@ -8,7 +8,11 @@ function PlaylistCard({ playlist, onClickPlaylist }) {
   }
 
   return (
-    <Card onClick={handleClick}>
+    <Card onClick={handleClick} raised={true} sx={{
+      display: 'flex', 
+      backgroundColor: 'rgba(0, 0, 0, 0.6)', 
+      height: 100,
+      }}>
       {playlist.id}
     </Card>
   )

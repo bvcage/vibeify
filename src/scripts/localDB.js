@@ -1,8 +1,24 @@
 const PLAYLIST_URL = "http://localhost:3001/playlists";
-const SONGS_URL = "http://localhost:3001/songs";
+const USER_ID = localStorage.getItem("user_id");
+const USER_URL = `http://localhost:3001/users/${USER_ID}`;
 
-export function clearDB () {
-    fetch(PLAYLIST_URL)
+export function addSongToPlaylist (playlist, song) {
+    const newSongAry = [...playlist.tracks, song];
+    const patchPlaylist = {...playlist,
+        "tracks": newSongAry
+    }
+    fetch(`${PLAYLIST_URL}/${playlist.id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(patchPlaylist),
+    })
+    return newSongAry;
+}
+
+export async function clearDB () {
+    return await fetch(PLAYLIST_URL)
     .then(r => r.json())
     .then(list => {
         list.forEach(playlist => {
@@ -14,15 +30,18 @@ export function clearDB () {
             })
         })
     })
-    fetch(SONGS_URL)
-    .then(r => r.json())
-    .then(library => {
-        library.forEach(song => {
-            fetch(`${SONGS_URL}/${song.id}`, {
-                method: "DELETE",
+    .then(async () => {
+        return await fetch(USER_URL)
+        .then(r => r.json())
+        .then(user => {
+            return fetch(USER_URL, {
+                method: "PATCH",
                 headers: {
-                    "Content-Type": "application/json",
-                }
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({...user,
+                    "songs": []
+                })
             })
         })
     })
@@ -65,7 +84,7 @@ export async function postSongToLocal (song, songIdAry = loadLocalSongIds) {
         await fetch(`http://localhost:3001/songs`, {
             method: "POST",
             headers: {
-            "Content-Type": "application/json",
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(song),
         });
