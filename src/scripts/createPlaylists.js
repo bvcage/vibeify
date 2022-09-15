@@ -45,7 +45,7 @@ export async function createDefaultPlaylists () {
         })
     } else return;
 
-    function addToPlaylist (playlistType, playlistId, song) {
+    async function addToPlaylist (playlistType, playlistId, song) {
 
         const playlist = playlistAry.find(ele => ele.id === playlistId);
         
@@ -61,7 +61,7 @@ export async function createDefaultPlaylists () {
                 "tracks": [song]
             }
             playlistAry.push(newPlaylist);
-            return fetch(PLAYLISTS_URL, {
+            return await fetch(PLAYLISTS_URL, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -76,7 +76,7 @@ export async function createDefaultPlaylists () {
                 if (item.id === patchPlaylist.id) return patchPlaylist;
                 return item;
             })
-            return fetch(`${PLAYLISTS_URL}/${playlist.id}`, {
+            return await fetch(`${PLAYLISTS_URL}/${playlist.id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
