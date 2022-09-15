@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from '@mui/material/Link'
 import { red } from '@mui/material/colors'
-import { Card, CardContent, CardMedia, Typography, IconButton, alpha } from '@mui/material'
+import { Card, CardContent, CardMedia, Typography, IconButton } from '@mui/material'
 import "../App.css"
 
 
@@ -18,7 +18,7 @@ function SongCard({ song, onClickDelete }) {
   }
 
   return (
-    <Card raised='true' sx={{ maxWidth: 400, maxHeight: 120, display: 'flex', backgroundColor: '#1e1e1e'}} onClick={showSongDetails}>
+    <Card raised='true' sx={{ maxWidth: 400, maxHeight: 120, display: 'flex', backgroundColor: 'rgba(0, 0, 0, 0.6)'}} onClick={showSongDetails}>
 
       <CardMedia
         component="img"

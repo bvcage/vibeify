@@ -37,6 +37,7 @@ export async function createDefaultPlaylists () {
                 // mood playlists
                 if (isHappy(song)) addToPlaylist("mood", "happy", song)
                 else if (isSad(song)) addToPlaylist("mood", "sad", song);
+                else if (isWorkout(song)) addToPlaylist('mood', 'workout', song)
             })
             return playlistAry;
         })
@@ -93,6 +94,16 @@ export async function createDefaultPlaylists () {
         const { energy, valence } = song.audio_features;
         if (valence < 0.2 && energy < 0.4) return true;
         return false;
+    }
+
+    function isWorkout (song) {
+        const { energy, valence, loudness, tempo } = song.audio_features;
+        if (valence > 0.5
+            && energy > 0.5
+            && tempo > 160
+            && loudness > -6
+            ) return true;
+            return false;
     }
 }
 
