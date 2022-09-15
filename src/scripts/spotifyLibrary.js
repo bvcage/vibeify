@@ -31,8 +31,15 @@ export function getSpotifyLibrary () {
         console.log('fetching audio features ...');
         const url = `http://localhost:3001/users/${userId}`;
         const user = await fetch(url).then(r => r.json());
-        const songIdAry = user.songs.map(song => song.id);
-
+        const filteredAry = user.songs.filter(song => {
+            if (!!song.id) {
+                return true
+            } else {
+                return false
+            }
+        });
+        
+        const songIdAry = filteredAry.map(song => song.id);
         const numSongs = songIdAry.length;
         const callLimit = 100;
         let featuresAry = [];
@@ -42,12 +49,11 @@ export function getSpotifyLibrary () {
             featuresAry.push(...returnAry.audio_features);
         }
 
-        const newSongsAry = user.songs.map(song => {
+        const newSongsAry = filteredAry.map(song => {
             return {...song,
                 audio_features: featuresAry.find(entry => entry.id === song.id)
             }
         })
-
         return await fetch(url, {
             method: "PATCH",
             headers: {
