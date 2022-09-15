@@ -7,14 +7,15 @@ import Link from '@mui/material/Link'
 function Footer() {
   return (
     <footer>
-      <Box px={{ xs: 3, sm: 10 }}
+      <Box 
+            px={{ xs: 3, sm: 10 }}
             py={{ xs: 3, sm: 3 }}
-            textAlign="center" bgcolor="text.secondary"
+            bgcolor="text.secondary"
             color="white">
         <Container maxWidth="lg">
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12}>
-              <Box borderBottom ={2}>VIBEIFY DEVELOPERS</Box>
+              <Box fontWeight="bold" borderBottom ={2}>VIBEIFY DEVELOPERS</Box>
               <Box>
                 <Link href="https://github.com/bvcage" color="inherit">
                   Bailey Cage
