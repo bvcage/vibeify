@@ -23,6 +23,7 @@ function LoginButton () {
             if (loginPopup.window.location.href.includes("http://localhost:3000/index.html")) loginPopup.close();
             if (!loginPopup || !loginPopup.closed) return;
             clearInterval(checkPopup);
+            console.log('login:', loginPopup.window.location.href);
             window.location.href = loginPopup.window.location.href;
         }, 100);
     }

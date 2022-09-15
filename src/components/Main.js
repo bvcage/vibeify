@@ -6,7 +6,7 @@ import Footer from './Footer'
 
 function Main() {
   return (
-    <div>
+    <div style={{ height: '100vh' }}>
         <Header />
         <About />
         <Footer />
