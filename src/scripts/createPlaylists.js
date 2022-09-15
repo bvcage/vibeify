@@ -35,18 +35,20 @@ export async function createDefaultPlaylists () {
         return await fetch(USER_URL)
         .then(r => r.json())
         .then(user => {
-            user.songs.forEach(song => {
+            user.songs.forEach(async (song) => {
                 // mood playlists
-                if (isHappy(song)) addToPlaylist("mood", "happy", song)
-                else if (isSad(song)) addToPlaylist("mood", "sad", song);
-                else if (isWorkout(song)) addToPlaylist('mood', 'workout', song)
+                if (isHappy(song)) await addToPlaylist("mood", "happy", song)
+                else if (isSad(song)) await addToPlaylist("mood", "sad", song);
+                else if (isWorkout(song)) await addToPlaylist('mood', 'workout', song)
             })
             return playlistAry;
         })
     } else return;
 
     function addToPlaylist (playlistType, playlistId, song) {
+
         const playlist = playlistAry.find(ele => ele.id === playlistId);
+        
         if (!!playlist) {
             if (playlist.tracks.length >= PLAYLIST_LIMIT) return;   // limit # of songs on default playlist
             if (playlist.tracks.find(ele => ele.album.name === song.album.name)) return; // limit default playlist to 1 song per album
@@ -59,7 +61,7 @@ export async function createDefaultPlaylists () {
                 "tracks": [song]
             }
             playlistAry.push(newPlaylist);
-            fetch(PLAYLISTS_URL, {
+            return fetch(PLAYLISTS_URL, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -74,7 +76,7 @@ export async function createDefaultPlaylists () {
                 if (item.id === patchPlaylist.id) return patchPlaylist;
                 return item;
             })
-            fetch(`${PLAYLISTS_URL}/${playlist.id}`, {
+            return fetch(`${PLAYLISTS_URL}/${playlist.id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
