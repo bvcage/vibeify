@@ -18,12 +18,6 @@ export function addSongToPlaylist (playlist, song) {
 }
 
 export function clearDB () {
-    // fetch(PLAYLIST_URL, {
-    //     method: "DELETE"
-    // })
-    // fetch(SONGS_URL, {
-    //     method: "DELETE"
-    // })
     fetch(PLAYLIST_URL)
     .then(r => r.json())
     .then(list => {
