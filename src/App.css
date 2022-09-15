@@ -73,3 +73,10 @@
 .avatar {
   padding-right: 8px;
 }
+
+.deleteDiv {
+  display: flex;
+  height: auto;
+  flex-direction: column;
+  justify-content: end;
+}
