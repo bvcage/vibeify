@@ -17,8 +17,8 @@ export function addSongToPlaylist (playlist, song) {
     return newSongAry;
 }
 
-export function clearDB () {
-    fetch(PLAYLIST_URL)
+export async function clearDB () {
+    return await fetch(PLAYLIST_URL)
     .then(r => r.json())
     .then(list => {
         list.forEach(playlist => {
@@ -30,11 +30,11 @@ export function clearDB () {
             })
         })
     })
-    .then(
-        fetch(USER_URL)
+    .then(async () => {
+        return await fetch(USER_URL)
         .then(r => r.json())
         .then(user => {
-            fetch(USER_URL, {
+            return fetch(USER_URL, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
@@ -44,7 +44,7 @@ export function clearDB () {
                 })
             })
         })
-    )
+    })
 }
 
 export function loadLocalSongIds () {

@@ -40,13 +40,18 @@ function LoginButton () {
 
     function toggleLoginLogout () {
         if (isLoggedIn) {
-            localStorage.clear();
-            clearDB();
+            clearDB()
+            .then(() => {
+                console.log('done')
+                localStorage.clear();
+                setIsLoggedIn(!isLoggedIn);
+                window.location.replace("http://localhost:3000")
+            })
         }
         else {
             authorizeApp();
+            setIsLoggedIn(!isLoggedIn);
         }
-        setIsLoggedIn(!isLoggedIn);
     }
 
     return (
