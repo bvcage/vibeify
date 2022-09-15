@@ -28,7 +28,6 @@ function Main() {
   }
 
   return (
-    <>
     <div className='container'>
         <Header />
         <Container maxWidth="lg">
@@ -46,7 +45,6 @@ function Main() {
         </Container>
         <Footer />
     </div>
-    </>
   )
 }
 
