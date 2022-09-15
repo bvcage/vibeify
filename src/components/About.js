@@ -21,18 +21,7 @@ function About() {
           </Box>
       </Paper>
     </Box>
-    //  <Box style={{height:"100vh"}}
-    //  px={{ xs: 3, sm: 10 }}
-    //  py={{ xs: 3, sm: 3 }}
-    //  bgcolor=""
-    //  color="white">
-    //    <Container>
-    //      <Card direction="row" spacing={2} justifyContent="center">
-    //        About Vibeify
-    //        Create a playlist to match your mood!
-    //      </Card> 
-    //    </Container>  
-    //  </Box>
+
   )
 }
 
