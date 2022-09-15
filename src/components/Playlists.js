@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import '../App.css'
 import PlaylistMenu from './PlaylistMenu'
 import SongsList from './SongsList'
-import { clearPlaylists, createDefaultPlaylists } from '../scripts/createPlaylists';
 import { addSongToPlaylist, removeSongFromPlaylist } from '../scripts/localDB';
 
 import { Box, Stack } from '@mui/material';
@@ -34,8 +33,8 @@ function Playlists({ playlistAry, updatePlaylistAry }) {
       "tracks": newSongsAry
     }
     updatePlaylistAry(newSongPlaylist);
-    setSelectedPlaylist(newSongPlaylist)
-    setSongsAry(newSongsAry)
+    setSelectedPlaylist(newSongPlaylist);
+    setSongsAry(newSongsAry);
   };
 
   return (
