@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button'
-import { Autocomplete } from '@mui/material';
+import { Autocomplete, Box } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 function SearchBar({ onClickAdd }) {
     const [songs, setSongs] = useState([])
     const [open, setOpen] = useState(false)
     let searchTerm = ''
 
+    const darkTheme = createTheme({
+      palette: {
+        mode: 'dark',
+      },
+    });
 
     useEffect(() => {
         fetch('http://localhost:3001/songs')
@@ -17,6 +23,8 @@ function SearchBar({ onClickAdd }) {
     }, [])
 
     return (
+      <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
       <Autocomplete
         value={searchTerm}  
         selectOnFocus
@@ -45,6 +53,7 @@ function SearchBar({ onClickAdd }) {
           <TextField {...params} label="Search for a song..." />
         )}
       />
+      </ThemeProvider>
     );
 }
 
