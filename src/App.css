@@ -38,7 +38,7 @@
 
 .container {
   width: 100%;
-  height: auto;
+  height: 100vh;
   position: absolute;
   background: linear-gradient(45deg,#F17C58, #E94584, #24AADB , #27DBB1,#FFDC18, #FF3706);
   background-size: 600% 100%;
