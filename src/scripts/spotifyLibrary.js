@@ -97,18 +97,6 @@ export function getSpotifyLibrary () {
         .then(data => {return data})
     }
 
-    // function fetchTracksForPlaylist (playlist) {
-    //     console.log(playlist.total);
-    //     return fetch(playlist.href, {
-    //         headers: {
-    //             "Authorization": 'Bearer ' + accessToken,
-    //             "Content-Type": "application/json"
-    //         }
-    //     })
-    //     .then(r => r.json())
-    //     .then(data => {return data.items})
-    // }
-
     async function fetchTracksForPlaylistAry (playlistAry) {
         let allPlaylistSongArys = [];
         playlistAry.forEach(playlist => {
@@ -154,8 +142,7 @@ export function getSpotifyLibrary () {
             })
         });
         likedSongsAry = parseSpotifyTracksAry(likedSongsAry);
-        await postSongsAryToLocal(likedSongsAry);
-        return true;
+        return await postSongsAryToLocal(likedSongsAry);
     }
 
     async function fetchUserPlaylists () {
@@ -210,30 +197,17 @@ export function getSpotifyLibrary () {
         return songsAry;
     }
 
-    async function patchSongOnLocal (patchSong) {
-        const url = `http://localhost:3001/songs/${patchSong.id}`
-        return await fetch(url, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(patchSong)
-        })
-        .then(r => r.json())
-        .then(patch => {return patch});
-    }
-
     async function postSongsAryToLocal (newSongsAry) {
-        fetch(`http://localhost:3001/users/${userId}`)
+        await fetch(`http://localhost:3001/users/${userId}`)
         .then(r => r.json())
-        .then(user => {
+        .then(async (user) => {
             let uniqueSongsAry = [...user.songs];
             newSongsAry.forEach(song => {
                 if (!uniqueSongsAry.find(ele => ele.id === song.id)) {
                     uniqueSongsAry.push(song);
                 }
             })
-            fetch(`http://localhost:3001/users/${userId}`, {
+            await fetch(`http://localhost:3001/users/${userId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
