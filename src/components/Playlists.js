@@ -8,27 +8,17 @@ import { addSongToPlaylist, removeSongFromPlaylist } from '../scripts/localDB';
 import { Box, Stack } from '@mui/material';
 import SearchBar from './SearchBar';
 
-function Playlists() {
+function Playlists({ playlistAry, updatePlaylistAry }) {
 
-  const [playlistAry, setPlaylistAry] = useState([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState();
   const [songsAry, setSongsAry] = useState([]);
-
-  useEffect(() => {
-    clearPlaylists()
-    .then(createDefaultPlaylists)
-    .then(data => setPlaylistAry(data))
-  }, []);
 
   function onClickDelete (songId) {
     const patchSongsAry = removeSongFromPlaylist(selectedPlaylist, songId);
     const patchPlaylist = {...selectedPlaylist,
       "tracks": patchSongsAry
     }
-    setPlaylistAry(playlistAry.map(list => {
-      if (list.id === patchPlaylist.id) return patchPlaylist;
-      return list;
-    }))
+    updatePlaylistAry(patchPlaylist);
     setSelectedPlaylist(patchPlaylist);
     setSongsAry(patchSongsAry);
   }
@@ -43,10 +33,7 @@ function Playlists() {
     const newSongPlaylist = {...selectedPlaylist,
       "tracks": newSongsAry
     }
-    setPlaylistAry(playlistAry.map(list => {
-      if (list.id === newSongPlaylist.id) return newSongPlaylist;
-      return list;
-    }))
+    updatePlaylistAry(newSongPlaylist);
     setSelectedPlaylist(newSongPlaylist)
     setSongsAry(newSongsAry)
   };
