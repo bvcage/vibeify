@@ -1,6 +1,8 @@
 const PLAYLIST_LIMIT = 14;
 const PLAYLISTS_URL = "http://localhost:3001/playlists";
-const SONGS_URL = "http://localhost:3001/songs";
+
+const USER_ID = localStorage.getItem("user_id");
+const USER_URL = `http://localhost:3001/users/${USER_ID}`;
 
 export async function clearPlaylists () {
     await fetch(PLAYLISTS_URL)
@@ -30,10 +32,10 @@ export async function createDefaultPlaylists () {
         })
 
     if (!!playlistAry) {
-        return await fetch(SONGS_URL)
+        return await fetch(USER_URL)
         .then(r => r.json())
-        .then(library => {
-            library.forEach(song => {
+        .then(user => {
+            user.songs.forEach(song => {
                 // mood playlists
                 if (isHappy(song)) addToPlaylist("mood", "happy", song)
                 else if (isSad(song)) addToPlaylist("mood", "sad", song);
