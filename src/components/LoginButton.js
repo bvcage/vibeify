@@ -42,7 +42,6 @@ function LoginButton () {
         if (isLoggedIn) {
             clearDB()
             .then(() => {
-                console.log('done')
                 localStorage.clear();
                 setIsLoggedIn(!isLoggedIn);
                 window.location.replace("http://localhost:3000")
