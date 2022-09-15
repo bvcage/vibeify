@@ -20,16 +20,18 @@ function SongsList({ songsAry, onClickDelete }) {
 
   const addSongBtn = (
     <Grid item xs={4} key='add-btn' >
-      <Card sx={{
+      <Card raised={true} sx={{
         display: "flex",
         height: 120,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        backgroundColor: 'rgba(255, 255, 255, 0)'
       }}>
         <Button
+          variant='contained'
           fullWidth
           onClick={handleClickAddSong}
-          sx={{height: '100%'}}
+          sx={{height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.6)'}}
           >➕ add song
         </Button>
       </Card>
