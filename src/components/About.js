@@ -18,12 +18,6 @@ function About() {
               <li>Add or delete songs accordingly</li>
             </ul>
             <p>Like Vibeify? Checkout out the developers Github who created it in the footer!</p>
-          <h2>Technologies</h2>
-            <p>This project is created with:</p>
-            <ul>
-              <li>React version: 18.2.0</li>
-              <li>React router version: 6.3.0</li>
-            </ul>
           <h2>Features</h2>
             <ul>
               <li>Users are able to login using Spotify</li>
@@ -37,6 +31,12 @@ function About() {
               <li>Add sliders to dynamically edit playlists</li>
               <li>Add save & share functionality</li>
               <li>Allow in-app playback of music</li>
+            </ul>
+          <h2>Technologies</h2>
+            <p>This project is created with:</p>
+            <ul>
+              <li>React version: 18.2.0</li>
+              <li>React router version: 6.3.0</li>
             </ul>
         </Box>
       </Paper>
