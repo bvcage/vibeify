@@ -10,8 +10,6 @@ function PlaylistMenu({ playlistAry, onClickPlaylist }) {
   return (
     <Grid sx={{width: 1000, marginLeft: '128px'}}>
       {playlistAry.map((playlist) => {
-          console.log(playlist)
-
         return (
             <PlaylistCard
               key={playlist.id}

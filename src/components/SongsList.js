@@ -1,4 +1,4 @@
-import React from 'react'
+import { React, useRef }from 'react'
 import SongCard from './SongCard'
 import Filters from './Filters'
 import SpeedDial from './SpeedDial'
@@ -6,8 +6,8 @@ import { Button, Card, Grid } from '@mui/material'
 
 function SongsList({ songsAry, onClickDelete }) {
 
-  function handleClickAddSong (event) {
-    console.log('add song');
+  function handleClickAddSong () {
+    console.log('click')
   }
 
   const songs = songsAry.map(song => {

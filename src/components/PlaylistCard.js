@@ -73,8 +73,6 @@ function PlaylistCard({ playlist, onClickPlaylist, image }) {
     onClickPlaylist(playlist);
   }
 
-  console.log(image)
-
   return (
     <>
       <ImageButton

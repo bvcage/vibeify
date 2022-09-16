@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import { CLIENT_ID } from '../keys';
 import { clearDB } from '../scripts/localDB.js'
 
+
 function LoginButton () {
 
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("user_id") !== null);
@@ -56,10 +57,11 @@ function LoginButton () {
 
     return (
         <Button
+            sx={{textTransform: 'none'}}
             variant='contained'
             color='success'
             onClick={toggleLoginLogout}
-            >{localStorage.getItem("user_id") ? 'logout': 'login with spotify'}
+            >{localStorage.getItem("user_id") ? 'Logout' : 'Login with Spotify'}
         </Button>
     )
 
