@@ -43,7 +43,7 @@ function Playlists({ playlistAry, updatePlaylistAry }) {
         <PlaylistMenu playlistAry={playlistAry} onClickPlaylist={onClickPlaylist} />
         <SearchBar onClickAdd={onClickAdd} />
       </Box>
-      <Box>
+      <Box sx={{pb: 28}}>
         <SongsList songsAry={songsAry} onClickDelete={onClickDelete} />
       </Box>
     </Stack>

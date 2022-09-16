@@ -9,7 +9,7 @@ function Login() {
   const code = searchParams.get('code');
 
   let accessToken = localStorage.getItem("access_token");
-
+ 
   if (code) loginUser(code);
   else if (!!accessToken) (<Navigate to="/loading" />);
   else window.location.replace("http://localhost:3000");
