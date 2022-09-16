@@ -1,0 +1,18 @@
+{
+    "happy": {
+        "url": "https://i.imgur.com/0LiAkvP.jpg",
+        "width": "30%",
+        "title": "Happy"
+
+    },
+    "sad": {
+        "url": "https://i.imgur.com/zgEGXgK.jpg",
+        "title": "Sad",
+        "width": "30%"
+    },
+    "workout": {
+        "url": "https://i.imgur.com/tbjxsB5.jpg",
+        "title": "Workout",
+        "width": "30%"
+    }
+}
