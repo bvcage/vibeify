@@ -14,28 +14,25 @@ function Footer() {
             color="white">
         <Container maxWidth="lg">
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={12}>
+            <Grid item xs={12}>
               <Box fontWeight="bold" borderBottom ={2}>VIBEIFY DEVELOPERS</Box>
-              <Box>
-                <Link href="https://github.com/bvcage" color="inherit">
-                  Bailey Cage
-                </Link>
-              </Box>
-              <Box>
-                <Link href="https://github.com/erkhart96" color="inherit">
-                  Ben Erkhart
-                </Link>
-              </Box>
-              <Box>
-                <Link href="https://github.com/Acavazos19" color="inherit">
-                  Albert Cavazos
-                </Link>
-              </Box>
+            </Grid>
+            <Grid item xs={3}>
+              <Link href="https://github.com/bvcage" color="inherit">
+                Bailey Cage
+              </Link>
+            </Grid>
+            <Grid item xs={3}>
+              <Link href="https://github.com/erkhart96" color="inherit">
+                Ben Erkhart
+              </Link>
+            </Grid>
+            <Grid item xs={3}>
+              <Link href="https://github.com/Acavazos19" color="inherit">
+                Albert Cavazos
+              </Link>
             </Grid>
           </Grid>
-          <Box textAlign="center" pt={{xs: 5, sm: 5}} pb={{xs: 5, sm:0}}>
-            Vibeify &reg; {new Date().getFullYear()}
-          </Box>
         </Container>
       </Box>
     </footer>
