@@ -1,4 +1,4 @@
-const PLAYLIST_LIMIT = 14;
+const PLAYLIST_LIMIT = 15;
 const PLAYLISTS_URL = "http://localhost:3001/playlists";
 
 const USER_ID = localStorage.getItem("user_id");
