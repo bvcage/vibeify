@@ -9,6 +9,7 @@ App to gather your favorite songs and generate playlists
 * [Setup](#setup)
 
 # Introduction
+Ever wish you could shuffle songs across all your playlists? Vibeify downloads your entire Spotify library and sorts it by ~vibe~ so that you can listen to all your favorites based on your mood.
 
 # Technologies
 
