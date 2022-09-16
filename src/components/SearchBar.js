@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button'
 import { Autocomplete, Box } from '@mui/material';
@@ -9,6 +9,7 @@ function SearchBar({ onClickAdd }) {
   const userId = localStorage.getItem("user_id");
   const [songs, setSongs] = useState([])
   const [open, setOpen] = useState(false)
+
   let searchTerm = ''
 
     const darkTheme = createTheme({
