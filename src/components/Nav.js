@@ -34,7 +34,7 @@ function Nav() {
   };
 
   return (
-    <div style={{ display: 'flex', gap: '8px', }}>
+    <div style={{ display: 'flex', gap: '8px' }}>
       <Box
         sx={{
           display: 'flex',
@@ -60,7 +60,7 @@ function Nav() {
           >
             <div className='login'>
               <p>{userData.display_name}</p>
-              <Avatar src={userData.images[0].url}/>
+              {userData.images[0].url ? <Avatar src={userData.images[0].url}/> : null}
             </div>
           </Button>
           <Menu
