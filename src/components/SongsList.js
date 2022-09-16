@@ -1,14 +1,12 @@
-import { React, useRef }from 'react'
+import { React }from 'react'
 import SongCard from './SongCard'
-import Filters from './Filters'
-import SpeedDial from './SpeedDial'
-import { Button, Card, Grid } from '@mui/material'
+import { Grid } from '@mui/material'
 
 function SongsList({ songsAry, onClickDelete }) {
 
-  function handleClickAddSong () {
-    console.log('click')
-  }
+  // function handleClickAddSong () {
+  //   console.log('click')
+  // }
 
   const songs = songsAry.map(song => {
     return (
@@ -18,25 +16,25 @@ function SongsList({ songsAry, onClickDelete }) {
     )
   })
 
-  const addSongBtn = (
-    <Grid item xs={4} key='add-btn' >
-      <Card raised={true} sx={{
-        display: "flex",
-        height: 120,
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: 'rgba(255, 255, 255, 0)'
-      }}>
-        <Button
-          variant='contained'
-          fullWidth
-          onClick={handleClickAddSong}
-          sx={{height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.6)'}}
-          >➕ add song
-        </Button>
-      </Card>
-    </Grid>
-  )
+  // const addSongBtn = (
+  //   <Grid item xs={4} key='add-btn' >
+  //     <Card raised={true} sx={{
+  //       display: "flex",
+  //       height: 120,
+  //       alignItems: "center",
+  //       justifyContent: "center",
+  //       backgroundColor: 'rgba(255, 255, 255, 0)'
+  //     }}>
+  //       <Button
+  //         variant='contained'
+  //         fullWidth
+  //         onClick={handleClickAddSong}
+  //         sx={{height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.6)'}}
+  //         >➕ add song
+  //       </Button>
+  //     </Card>
+  //   </Grid>
+  // )
 
   return (
     <Grid container spacing={2}>

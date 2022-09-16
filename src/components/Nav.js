@@ -1,6 +1,5 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { styled } from '@mui/material/styles'
 import { Avatar, Box, Button, ButtonGroup, Menu, MenuItem } from '@mui/material'
 import LoginButton from './LoginButton'
 
@@ -9,11 +8,6 @@ import LoginButton from './LoginButton'
 function Nav() {
 
   const userData = (JSON.parse(localStorage.getItem("user_profile")))
-  const UserButton = styled(Button) ({
-    textTransform: 'none',
-    color: 'white',
-    paddingTop: '8px'
-  })
   
   const navigate = useNavigate();
   
