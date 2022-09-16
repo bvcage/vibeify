@@ -48,7 +48,7 @@ function SearchBar({ onClickAdd }) {
           }
         }}
         onClose={() => setOpen(false)}
-        renderOption={(props, option) => <Box><Button onClick={() => onClickAdd(option)}>+ Add</Button>{option.name} - {option.artists[0].name}</Box>}
+        renderOption={(props, option) => <Box key={option.id}><Button onClick={() => onClickAdd(option)}>+ Add</Button>{option.name} - {option.artists[0].name}</Box>}
         sx={{ width: 1152, paddingTop: '15px' }}
         freeSolo
         renderInput={(params) => (
