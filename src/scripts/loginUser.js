@@ -41,9 +41,10 @@ export function loginUser (code) {
         })
         .then(r => r.json())
         .then(profile => {
+            console.log(profile);
             localStorage.setItem("user_id", profile.id);
             localStorage.setItem("user_profile", JSON.stringify(profile));
-            return saveUserProfile(profile);
+            // return saveUserProfile(profile);
         });
     }
 
@@ -53,24 +54,24 @@ export function loginUser (code) {
         if (done) window.location.replace("http://localhost:3000/home/loading");
     }
 
-    async function saveUserProfile (profile) {
-        return await fetch(`http://localhost:3001/users`)
-        .then(r => r.json())
-        .then(async (users) => {
-            if (!users.find(ele => ele.id === profile.id)) {
-                return await fetch(`http://localhost:3001/users`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        id: profile.id,
-                        songs: [],
-                    })
-                })
-            } else {return profile}
-        })
-    }
+    // async function saveUserProfile (profile) {
+    //     return await fetch(`http://localhost:3001/users`)
+    //     .then(r => r.json())
+    //     .then(async (users) => {
+    //         if (!users.find(ele => ele.id === profile.id)) {
+    //             return await fetch(`http://localhost:3001/users`, {
+    //                 method: "POST",
+    //                 headers: {
+    //                     "Content-Type": "application/json"
+    //                 },
+    //                 body: JSON.stringify({
+    //                     id: profile.id,
+    //                     songs: [],
+    //                 })
+    //             })
+    //         } else {return profile}
+    //     })
+    // }
 
     initLoginUser();
 

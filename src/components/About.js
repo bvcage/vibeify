@@ -16,7 +16,13 @@ function About() {
           </Box>
           <Box pt={5}>
             <h2>Instructions</h2>
-            <p>Head on over to the playlists tab and enjoy!</p>
+            <ul>
+              <li>Head on over to the Playlists tab</li>
+              <li>Click on your song and Spotify will play it</li>
+              <li>Search for other songs from your library</li>
+              <li>Add or delete songs accordingly</li>
+            </ul>
+            <p>Like Vibeify? Checkout out the developers Github who created it in the footer!</p>
           </Box>
           <Box pt={5}>
             <h2>Technologies</h2>
@@ -32,8 +38,10 @@ function About() {
             <h2>Features</h2>
             <p>
               <ul>
-                <li>Get songs from your Spotify library</li>
+                <li>Users are able to login using Spotify</li>
+                <li>Vibeify gets songs from your Spotify library</li>
                 <li>Reshuffle your songs across playlists using audio qualities</li>
+                <li>Create playlists to match your mood for the day!</li>
               </ul>
             </p>
             <h3>Future Improvements</h3>
