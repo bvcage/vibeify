@@ -1,12 +1,13 @@
 import { React }from 'react'
 import SongCard from './SongCard'
-import { Grid } from '@mui/material'
+import { Button, Card, Grid } from '@mui/material'
+import { savePlaylistToSpotify } from '../scripts/spotifyLibrary'
 
 function SongsList({ songsAry, showSongs, onClickDelete }) {
 
-  // function handleClickAddSong () {
-  //   console.log('click')
-  // }
+  function handleClickSave () {
+    savePlaylistToSpotify(songsAry);
+  }
 
   const songs = songsAry.map(song => {
     return (
@@ -16,30 +17,30 @@ function SongsList({ songsAry, showSongs, onClickDelete }) {
     )
   });
 
-  // const addSongBtn = (
-  //   <Grid item xs={4} key='add-btn' >
-  //     <Card raised={true} sx={{
-  //       display: "flex",
-  //       height: 120,
-  //       alignItems: "center",
-  //       justifyContent: "center",
-  //       backgroundColor: 'rgba(255, 255, 255, 0)'
-  //     }}>
-  //       <Button
-  //         variant='contained'
-  //         fullWidth
-  //         onClick={handleClickAddSong}
-  //         sx={{height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.6)'}}
-  //         >➕ add song
-  //       </Button>
-  //     </Card>
-  //   </Grid>
-  // )
+  const saveBtn = (
+    <Grid item xs={4} key='add-btn' >
+      <Card raised={true} sx={{
+        display: "flex",
+        height: 120,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: 'rgba(255, 255, 255, 0)'
+      }}>
+        <Button
+          variant='contained'
+          fullWidth
+          onClick={handleClickSave}
+          sx={{height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.6)'}}
+          >save to spotify
+        </Button>
+      </Card>
+    </Grid>
+  )
 
   return (
     <Grid container spacing={2}>
       { showSongs ? songs : null }
-      {/* {songs.length > 0 ? addSongBtn : null} */}
+      { songs.length > 0 ? saveBtn : null }
     </Grid>
   )
 }

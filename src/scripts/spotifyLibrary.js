@@ -229,3 +229,41 @@ export function getSpotifyLibrary () {
     return fetchUserLibrary();
 
 }
+
+export async function savePlaylistToSpotify (songsAry) {
+    const userId = localStorage.getItem("user_id");
+    const accessToken = localStorage.getItem("access_token");
+
+    // create spotify playlist
+    let url = `https://api.spotify.com/v1/users/${userId}/playlists`;
+    const newPlaylist = {
+        name: "My Vibeify Playlist",
+        public: false,
+        description: "Created with Vibeify",
+    }
+    const playlist = await fetch (url, {
+        method: "POST",
+        headers: {
+            "Authorization": 'Bearer ' + accessToken,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newPlaylist)
+    }).then(r => r.json());
+
+    // upload songs to new playlist
+    console.log(playlist)
+    url = `https://api.spotify.com/v1/playlists/${playlist.id}/tracks`;
+    console.log(url);
+    const songList = songsAry.map(song => song.uri);
+    fetch (url, {
+        method: "POST",
+        headers: {
+            "Authorization": 'Bearer ' + accessToken,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "uris": songList
+        })
+    })
+    
+}
