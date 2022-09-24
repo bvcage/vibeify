@@ -40,7 +40,7 @@ function SongsList({ songsAry, showSongs, onClickDelete }) {
   return (
     <Grid container spacing={2}>
       { showSongs ? songs : null }
-      { songs.length > 0 ? saveBtn : null }
+      { showSongs ? saveBtn : null }
     </Grid>
   )
 }
