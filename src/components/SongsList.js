@@ -18,7 +18,7 @@ function SongsList({ songsAry, showSongs, onClickDelete }) {
   });
 
   const saveBtn = (
-    <Grid item xs={4} key='add-btn' >
+    <Grid item xs={4} key='save-btn' >
       <Card raised={true} sx={{
         display: "flex",
         height: 120,
