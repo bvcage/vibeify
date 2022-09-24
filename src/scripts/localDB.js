@@ -57,6 +57,12 @@ export function loadLocalSongIds () {
     })
 }
 
+export async function loadSpotifyPlaylistsAry () {
+    return await fetch(`${USER_URL}`)
+    .then(r => r.json())
+    .then(user => {return user.playlists})
+}
+
 export async function patchSongOnLocal (patchSong) {
     const url = `http://localhost:3001/songs/${patchSong.id}`
     return await fetch(url, {
