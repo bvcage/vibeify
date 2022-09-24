@@ -21,16 +21,12 @@ export async function createDefaultPlaylists () {
     const userId = localStorage.getItem("user_id");
     const userUrl = `http://localhost:3001/users/${userId}`;
 
+    // get existing playlists list
     let playlistAry = await fetch(PLAYLISTS_URL)
         .then(r => r.json())
-        .then(list => {
-            let tempAry = [];
-            list.forEach(playlist => {
-                tempAry.push(playlist);
-            })
-            return tempAry;
-        })
+        .then(list => {return list})
 
+    // create default playlists
     if (!!playlistAry) {
         return await fetch(userUrl)
         .then(r => r.json())
@@ -55,19 +51,8 @@ export async function createDefaultPlaylists () {
         }
 
         if (!playlist) {
-            const newPlaylist = {
-                "id": playlistId,
-                "type": playlistType,
-                "tracks": [song]
-            }
+            const newPlaylist = createPlaylist(playlistId, playlistType);
             playlistAry.push(newPlaylist);
-            return await fetch(PLAYLISTS_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(newPlaylist)
-            })
         } else {
             const patchPlaylist = {...playlist,
                 "tracks": [...playlist.tracks, song]
@@ -109,6 +94,22 @@ export async function createDefaultPlaylists () {
             ) return true;
             return false;
     }
+}
+
+function createPlaylist (playlistId, playlistType) {
+    const newPlaylist = {
+        "id": playlistId,
+        "type": playlistType,
+        "tracks": []
+    }
+    fetch(PLAYLISTS_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newPlaylist)
+    })
+    return newPlaylist;
 }
 
 export function createSimilarPlaylist (songId) {
