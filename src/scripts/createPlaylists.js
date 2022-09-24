@@ -26,6 +26,9 @@ export async function createDefaultPlaylists () {
         .then(r => r.json())
         .then(list => {return list})
 
+    // create merge playlist placeholder
+    playlistAry.push(createPlaylist("merge", "custom"))
+
     // create default playlists
     if (!!playlistAry) {
         return await fetch(userUrl)
