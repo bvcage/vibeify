@@ -1,8 +1,11 @@
 import React from 'react';
 import "../App.css";
 import { getSpotifyLibrary } from "../scripts/spotifyLibrary";
+import { useNavigate } from "react-router-dom";
 
 function LoadLibrary() {
+
+    const navigate = useNavigate();
 
     let done = false;
     getSpotifyLibrary().then(() => {done = true});
@@ -10,7 +13,7 @@ function LoadLibrary() {
     const checkDone = setInterval(() => {
         if (!done) return;
         clearInterval(checkDone);
-        window.location.replace("http://localhost:3000/main/playlists");
+        navigate("/main/playlists");
     }, 1000);
 
     return (

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import { CLIENT_ID } from '../keys';
-import { clearDB } from '../scripts/localDB.js'
-
+import { clearDB } from '../scripts/localDB.js';
+import { loginUser } from '../scripts/loginUser';
+import { useNavigate } from 'react-router-dom';
 
 function LoginButton () {
 
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("user_id") !== null);
+    const navigate = useNavigate();
 
     function authorizeApp () {
         let query = new URLSearchParams({
@@ -36,8 +38,9 @@ function LoginButton () {
             if (loginPopup.window.location.href.includes("http://localhost:3000")) loginPopup.close();
             if (!loginPopup || !loginPopup.closed) return;
             clearInterval(checkPopup);
-            console.log('login:', loginPopup.window.location.href);
-            window.location.href = loginPopup.window.location.href;
+            const urlParams = new URLSearchParams(loginPopup.window.location.search);
+            const code = urlParams.get('code');
+            loginUser(code).then(() => navigate("/home/loading"));
         }, 100);
     }
 

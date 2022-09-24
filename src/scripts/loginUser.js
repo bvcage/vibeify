@@ -50,7 +50,8 @@ export function loginUser (code) {
     async function initLoginUser () {
         if (!accessToken) {await fetchAccessToken()}
         let done = await fetchUserProfile();
-        if (done) window.location.replace("http://localhost:3000/home/loading");
+        // if (done) window.location.replace("http://localhost:3000/home/loading");
+        if (done) return;
     }
 
     async function saveUserProfile (profile) {
@@ -72,6 +73,6 @@ export function loginUser (code) {
         })
     }
 
-    initLoginUser();
+    return initLoginUser();
 
 }

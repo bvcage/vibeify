@@ -28,22 +28,22 @@ function Main() {
   }
 
   return (
-    <div className='container'>
-        <Header />
-        <Container maxWidth="lg">
-          <Routes>
-            <Route path="about" element={<About />} />
-            <Route path="playlists"
-              element={
-                <Playlists
-                  playlistAry={playlistAry}
-                  updatePlaylistAry={updatePlaylistAry}
-                />
-              }
-            />
-          </Routes>
-        </Container>
-        <Footer />
+    <div>
+      <Header />
+      <Container maxWidth="lg">
+        <Routes>
+          <Route path="about" element={<About />} />
+          <Route path="playlists"
+            element={
+              <Playlists
+                playlistAry={playlistAry}
+                updatePlaylistAry={updatePlaylistAry}
+              />
+            }
+          />
+        </Routes>
+      </Container>
+      <Footer />
     </div>
   )
 }

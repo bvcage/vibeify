@@ -10,7 +10,7 @@ function Login() {
 
   let accessToken = localStorage.getItem("access_token");
  
-  if (code) loginUser(code);
+  if (code) loginUser(code).then(() => (<Navigate to="/loading" />));
   else if (!!accessToken) (<Navigate to="/loading" />);
   else window.location.replace("http://localhost:3000");
 

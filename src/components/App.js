@@ -7,11 +7,13 @@ import Main from './Main';
 function App() {
 
   return (
+    <div className="container">
       <Routes>
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="home/*" element={<Home />} />
         <Route path="main/*" element={<Main />} />
       </Routes>
+    </div>
   );
 }
 

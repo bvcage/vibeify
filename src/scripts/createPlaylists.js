@@ -1,25 +1,25 @@
 const PLAYLIST_LIMIT = 15;
 const PLAYLISTS_URL = "http://localhost:3001/playlists";
 
-const USER_ID = localStorage.getItem("user_id");
-const USER_URL = `http://localhost:3001/users/${USER_ID}`;
-
 export async function clearPlaylists () {
-    await fetch(PLAYLISTS_URL)
-        .then(r => r.json())
-        .then(list => {
-            list.forEach(playlist => {
-                fetch(`${PLAYLISTS_URL}/${playlist.id}`, {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                })
+    return await fetch(PLAYLISTS_URL)
+    .then(r => r.json())
+    .then(list => {
+        list.forEach(playlist => {
+            fetch(`${PLAYLISTS_URL}/${playlist.id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
             })
         })
+    });
 }
 
 export async function createDefaultPlaylists () {
+
+    const userId = localStorage.getItem("user_id");
+    const userUrl = `http://localhost:3001/users/${userId}`;
 
     let playlistAry = await fetch(PLAYLISTS_URL)
         .then(r => r.json())
@@ -32,7 +32,7 @@ export async function createDefaultPlaylists () {
         })
 
     if (!!playlistAry) {
-        return await fetch(USER_URL)
+        return await fetch(userUrl)
         .then(r => r.json())
         .then(user => {
             user.songs.forEach(async (song) => {
