@@ -28,9 +28,10 @@ function About() {
           <h3>Future Improvements</h3>
             <ul>
               <li>Improve logic in default shuffle</li>
-              <li>Add sliders to dynamically edit playlists</li>
               <li>Add save & share functionality</li>
               <li>Allow in-app playback of music</li>
+              <li>Add sliders to edit playlists</li>
+              <li>Persist user playlists locally</li>
             </ul>
           <h2>Technologies</h2>
             <p>This project is created with:</p>
