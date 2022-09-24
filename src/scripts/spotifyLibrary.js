@@ -152,16 +152,19 @@ export function getSpotifyLibrary () {
     }
 
     async function fetchUserPlaylists () {
-        console.log('fetching playlits...');
+        console.log('fetching playlists...');
         const apiUrl = "https://api.spotify.com/v1/me/playlists";
         const info = await fetchInfo(apiUrl);
         const dataAry = await fetchData(apiUrl, info);
     
+        // save playlists list
         let playlistsAry = [];
         dataAry.forEach(entry => playlistsAry.push(...(entry.items)));
+        await postPlaylistsAryToLocal(playlistsAry);
+
+        // save playlist tracks
         playlistsAry = playlistsAry.filter(playlist => playlist.owner.id === userId);
         let allTracksAry = await fetchTracksForPlaylistAry(playlistsAry);
-        
         allTracksAry = parseSpotifyTracksAry(allTracksAry);
         await postSongsAryToLocal(allTracksAry);
         return true;
@@ -202,6 +205,26 @@ export function getSpotifyLibrary () {
             songsAry.push(songEntry);
         })
         return songsAry;
+    }
+
+    async function postPlaylistsAryToLocal (playlistsAry) {
+        const postAry = playlistsAry.map(playlist => {
+            return {
+                id: playlist.id,
+                name: playlist.name,
+                url: playlist.external_urls.spotify,
+                uri: playlist.uri
+            }
+        })
+        return await fetch(`http://localhost:3001/users/${userId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "playlists": postAry
+            })
+        })
     }
 
     async function postSongsAryToLocal (newSongsAry) {
