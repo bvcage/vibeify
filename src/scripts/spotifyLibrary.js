@@ -174,7 +174,7 @@ export function getSpotifyLibrary () {
                 'id': null,
                 'name': track.album.name,
                 'url': null,
-                'imageUrl': [noAlbumArt]
+                'imageUrl': noAlbumArt
             }
             if (!track.is_local) {
                 albumEntry = {...albumEntry,
@@ -197,6 +197,7 @@ export function getSpotifyLibrary () {
                 "album": albumEntry,
                 "artists": artistsAry,
                 "url": track.external_urls.spotify,
+                "uri": track.uri,
             }
             songsAry.push(songEntry);
         })
