@@ -6,11 +6,12 @@ import About from './About'
 import Footer from './Footer'
 import Playlists from './Playlists'
 import { clearPlaylists, createDefaultPlaylists } from '../scripts/createPlaylists';
-
-
 import { Container } from '@mui/material'
 
 function Main() {
+
+  // direct to home if user not logged in
+  if (!localStorage.getItem("user_id")) window.location.replace("http://localhost:3000/home");
 
   const [playlistAry, setPlaylistAry] = useState([]);
 
