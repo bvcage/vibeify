@@ -78,7 +78,7 @@ function PlaylistCard({ playlist, onClickPlaylist, image }) {
       <ImageButton
         onClick={handleClick}
         focusRipple
-        key={image.title}
+        key={image.id}
         style={{
           width: image.width,
         }}
