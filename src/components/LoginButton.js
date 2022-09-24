@@ -20,7 +20,18 @@ function LoginButton () {
             show_dialog: true,
         })
         let url = `https://accounts.spotify.com/authorize?` + query;
-        const loginPopup = window.open(url, 'popup', 'menubar=no,width=600,height=925');
+        const width = 600;
+        const height = 800;
+        const left = ( window.screen.availWidth - width ) / 2;
+        const top = ( window.screen.availHeight - height ) / 2;
+        const loginPopup = window.open(url, 'popup',
+                `menubar=no,
+                location=no,
+                width=${width},
+                height=${height},
+                left=${left},
+                top=${top},
+                popup=true`);
         const checkPopup = setInterval(() => {
             if (loginPopup.window.location.href.includes("http://localhost:3000")) loginPopup.close();
             if (!loginPopup || !loginPopup.closed) return;
