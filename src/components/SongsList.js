@@ -2,7 +2,7 @@ import { React }from 'react'
 import SongCard from './SongCard'
 import { Grid } from '@mui/material'
 
-function SongsList({ songsAry, onClickDelete }) {
+function SongsList({ songsAry, showSongs, onClickDelete }) {
 
   // function handleClickAddSong () {
   //   console.log('click')
@@ -14,7 +14,7 @@ function SongsList({ songsAry, onClickDelete }) {
         <SongCard key={song.id} song={song} onClickDelete={onClickDelete} />
       </Grid>
     )
-  })
+  });
 
   // const addSongBtn = (
   //   <Grid item xs={4} key='add-btn' >
@@ -38,7 +38,7 @@ function SongsList({ songsAry, onClickDelete }) {
 
   return (
     <Grid container spacing={2}>
-      {songs}
+      { showSongs ? songs : null }
       {/* {songs.length > 0 ? addSongBtn : null} */}
     </Grid>
   )

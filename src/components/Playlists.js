@@ -10,6 +10,7 @@ import SearchBar from './SearchBar';
 function Playlists({ playlistAry, updatePlaylistAry }) {
 
   const [selectedPlaylist, setSelectedPlaylist] = useState();
+  const [showSongs, setShowSongs] = useState(false);
   const [songsAry, setSongsAry] = useState([]);
 
   function onClickDelete (songId) {
@@ -23,8 +24,13 @@ function Playlists({ playlistAry, updatePlaylistAry }) {
   }
 
   function onClickPlaylist (playlist) {
-    setSelectedPlaylist(playlist);
-    setSongsAry(playlist.tracks);
+    if (playlist !== selectedPlaylist) {
+      setShowSongs(true);
+      setSelectedPlaylist(playlist);
+      setSongsAry(playlist.tracks);
+    } else {
+      setShowSongs(!showSongs);
+    }
   }
 
   function onClickAdd (song) {
@@ -44,7 +50,7 @@ function Playlists({ playlistAry, updatePlaylistAry }) {
         <SearchBar onClickAdd={onClickAdd} />
       </Box>
       <Box sx={{pb: 28}}>
-        <SongsList songsAry={songsAry} onClickDelete={onClickDelete} />
+        <SongsList songsAry={songsAry} showSongs={showSongs} onClickDelete={onClickDelete} />
       </Box>
     </Stack>
   )
