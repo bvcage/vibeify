@@ -51,6 +51,16 @@ export async function clearDB () {
     })
 }
 
+export async function getMergePlaylistId () {
+    setUserValues();
+    return await fetch(PLAYLIST_URL)
+    .then(r => r.json())
+    .then(list => {
+        const numMerge = list.filter(playlist => playlist.type === "merge").length;
+        return numMerge + 1;
+    });
+}
+
 export function loadLocalSongIds () {
     let songIdAry = [];
     fetch(`http://localhost:3001/songs`)
@@ -62,6 +72,7 @@ export function loadLocalSongIds () {
 }
 
 export async function loadSpotifyPlaylistsAry () {
+    setUserValues();
     return await fetch(`${USER_URL}`)
     .then(r => r.json())
     .then(user => {return user.playlists})
@@ -78,6 +89,17 @@ export async function patchSongOnLocal (patchSong) {
     })
     .then(r => r.json())
     .then(patch => {return patch});
+}
+
+export async function postNewPlaylist (playlist) {
+    return await fetch (PLAYLIST_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(playlist)
+    })
+    .then(r => r.json())
 }
 
 export async function postSongsAryToLocal (songsAry) {
