@@ -1,6 +1,6 @@
 const PLAYLIST_URL = "http://localhost:3001/playlists";
-const USER_ID = localStorage.getItem("user_id");
-const USER_URL = `http://localhost:3001/users/${USER_ID}`;
+let USER_ID = localStorage.getItem("user_id");
+let USER_URL = `http://localhost:3001/users/${USER_ID}`;
 
 export function addSongToPlaylist (playlist, song) {
     const newSongAry = [...playlist.tracks, song];
@@ -18,6 +18,7 @@ export function addSongToPlaylist (playlist, song) {
 }
 
 export async function clearDB () {
+    setUserValues();
     return await fetch(PLAYLIST_URL)
     .then(r => r.json())
     .then(list => {
@@ -112,4 +113,9 @@ export function removeSongFromPlaylist (playlist, songId) {
         })
     })
     return newTracks;
+}
+
+function setUserValues () {
+    USER_ID = localStorage.getItem("user_id");
+    USER_URL = `http://localhost:3001/users/${USER_ID}`;
 }
