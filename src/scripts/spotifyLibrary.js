@@ -175,43 +175,6 @@ export function getSpotifyLibrary () {
         return true;
     }
 
-    function parseSpotifyTracksAry (tracksAry) {
-        const songsAry = [];
-        tracksAry.forEach(track => {
-            let albumEntry = {
-                'id': null,
-                'name': track.album.name,
-                'url': null,
-                'imageUrl': noAlbumArt
-            }
-            if (!track.is_local) {
-                albumEntry = {...albumEntry,
-                    'id': track.album.id,
-                    'url': track.album.external_urls.spotify,
-                    'imageUrl': track.album.images[0].url
-                }
-            }
-
-            const artistsAry = track.artists.map(artist => {
-                return {
-                    "id": artist.id,
-                    "name": artist.name,
-                    "url": artist.external_urls.spotify,
-                }
-            })
-            const songEntry = {
-                "id": track.id,
-                "name": track.name,
-                "album": albumEntry,
-                "artists": artistsAry,
-                "url": track.external_urls.spotify,
-                "uri": track.uri,
-            }
-            songsAry.push(songEntry);
-        })
-        return songsAry;
-    }
-
     async function postPlaylistsAryToLocal (playlistsAry) {
         const postAry = playlistsAry.map(playlist => {
             return {
@@ -258,6 +221,43 @@ export function getSpotifyLibrary () {
 
 }
 
+export function parseSpotifyTracksAry (tracksAry) {
+    const songsAry = [];
+    tracksAry.forEach(track => {
+        let albumEntry = {
+            'id': null,
+            'name': track.album.name,
+            'url': null,
+            'imageUrl': noAlbumArt
+        }
+        if (!track.is_local) {
+            albumEntry = {...albumEntry,
+                'id': track.album.id,
+                'url': track.album.external_urls.spotify,
+                'imageUrl': track.album.images[0].url
+            }
+        }
+
+        const artistsAry = track.artists.map(artist => {
+            return {
+                "id": artist.id,
+                "name": artist.name,
+                "url": artist.external_urls.spotify,
+            }
+        })
+        const songEntry = {
+            "id": track.id,
+            "name": track.name,
+            "album": albumEntry,
+            "artists": artistsAry,
+            "url": track.external_urls.spotify,
+            "uri": track.uri,
+        }
+        songsAry.push(songEntry);
+    })
+    return songsAry;
+}
+
 export async function savePlaylistToSpotify (songsAry) {
     setAccessToken();
     setUserId();
@@ -279,21 +279,25 @@ export async function savePlaylistToSpotify (songsAry) {
     }).then(r => r.json());
 
     // upload songs to new playlist
-    console.log(playlist)
     url = `https://api.spotify.com/v1/playlists/${playlist.id}/tracks`;
-    console.log(url);
     const songList = songsAry.map(song => song.uri);
-    fetch (url, {
-        method: "POST",
-        headers: {
-            "Authorization": 'Bearer ' + ACCESS_TOKEN,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            "uris": songList
+    const limit = 100;
+    const numCalls = Math.ceil(songList.length / limit);
+    for (let i=0; i<numCalls; ++i) {
+        const start = i * limit;
+        const end = start + limit;
+        const postList = songList.slice(start, end);
+        await fetch (url, {
+            method: "POST",
+            headers: {
+                "Authorization": 'Bearer ' + ACCESS_TOKEN,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "uris": postList
+            })
         })
-    })
-    
+    }
 }
 
 function setAccessToken () {
