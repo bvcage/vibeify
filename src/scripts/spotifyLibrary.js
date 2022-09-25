@@ -1,11 +1,54 @@
 import noAlbumArt from '../No-album-art.png'
 
+let ACCESS_TOKEN = localStorage.getItem("access_token");
+let USER_ID = localStorage.getItem("user_id");
+
+export async function fetchData (apiUrl, info) {
+    // set access token
+    setAccessToken();
+    // setup return object
+    let data = [];
+    // check apiUrl has query character at end
+    if (apiUrl.charAt(apiUrl.length - 1) !== '?') {apiUrl += '?'}
+    // call to API
+    const limit = 50;
+    const numCalls = Math.ceil(info.total / limit);
+    for (let i = 0; i < numCalls; ++i) {
+        const query = new URLSearchParams({
+            offset: limit * i,
+            limit: limit
+        })
+        const fetchUrl = apiUrl + query;
+        await fetch(fetchUrl, {
+            headers: {
+                "Authorization": 'Bearer ' + ACCESS_TOKEN,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(r => r.json())
+        .then(f => data.push(f))
+    }
+    return data;
+}
+
+export function fetchInfo (apiUrl) {
+    const url = apiUrl + "?limit=1";
+    return fetch (url, {
+        headers: {
+            "Authorization": 'Bearer ' + ACCESS_TOKEN,
+            "Content-Type": "application/json"
+        }
+    })
+    .then(r => r.json())
+    .then(data => {return data})
+}
+
 export function getSpotifyLibrary () {
 
     console.log('getting spotify library...');
 
-    let accessToken = localStorage.getItem("access_token");
-    let userId = localStorage.getItem("user_id");
+    setAccessToken();
+    setUserId();
 
     function fetchAudioFeatures (songId) {
         let url = `https://api.spotify.com/v1/audio-features`;
@@ -19,7 +62,7 @@ export function getSpotifyLibrary () {
         }
         return fetch(url, {
             headers: {
-                "Authorization": 'Bearer ' + accessToken,
+                "Authorization": 'Bearer ' + ACCESS_TOKEN,
                 "Content-Type": "application/json"
             }
         })
@@ -29,7 +72,7 @@ export function getSpotifyLibrary () {
 
     async function fetchAudioFeaturesForLibrary () {
         console.log('fetching audio features ...');
-        const url = `http://localhost:3001/users/${userId}`;
+        const url = `http://localhost:3001/users/${USER_ID}`;
         const user = await fetch(url).then(r => r.json());
         const filteredAry = user.songs.filter(song => {
             if (!!song.id) {
@@ -63,44 +106,6 @@ export function getSpotifyLibrary () {
                 "songs": newSongsAry
             })
         })
-    }
-
-    async function fetchData (apiUrl, info) {
-        // setup return object
-        let data = [];
-        // check apiUrl has query character at end
-        if (apiUrl.charAt(apiUrl.length - 1) !== '?') {apiUrl += '?'}
-        // call to API
-        const limit = 50;
-        const numCalls = Math.ceil(info.total / limit);
-        for (let i = 0; i < numCalls; ++i) {
-            const query = new URLSearchParams({
-                offset: limit * i,
-                limit: limit
-            })
-            const fetchUrl = apiUrl + query;
-            await fetch(fetchUrl, {
-                headers: {
-                    "Authorization": 'Bearer ' + accessToken,
-                    "Content-Type": "application/json"
-                }
-            })
-            .then(r => r.json())
-            .then(f => data.push(f))
-        }
-        return data;
-    }
-    
-    function fetchInfo (apiUrl) {
-        const url = apiUrl + "?limit=1";
-        return fetch (url, {
-            headers: {
-                "Authorization": 'Bearer ' + accessToken,
-                "Content-Type": "application/json"
-            }
-        })
-        .then(r => r.json())
-        .then(data => {return data})
     }
 
     async function fetchTracksForPlaylistAry (playlistAry) {
@@ -163,7 +168,7 @@ export function getSpotifyLibrary () {
         await postPlaylistsAryToLocal(playlistsAry);
 
         // save playlist tracks
-        playlistsAry = playlistsAry.filter(playlist => playlist.owner.id === userId);
+        playlistsAry = playlistsAry.filter(playlist => playlist.owner.id === USER_ID);
         let allTracksAry = await fetchTracksForPlaylistAry(playlistsAry);
         allTracksAry = parseSpotifyTracksAry(allTracksAry);
         await postSongsAryToLocal(allTracksAry);
@@ -216,7 +221,7 @@ export function getSpotifyLibrary () {
                 uri: playlist.uri
             }
         })
-        return await fetch(`http://localhost:3001/users/${userId}`, {
+        return await fetch(`http://localhost:3001/users/${USER_ID}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
@@ -228,7 +233,7 @@ export function getSpotifyLibrary () {
     }
 
     async function postSongsAryToLocal (newSongsAry) {
-        await fetch(`http://localhost:3001/users/${userId}`)
+        await fetch(`http://localhost:3001/users/${USER_ID}`)
         .then(r => r.json())
         .then(async (user) => {
             let uniqueSongsAry = [...user.songs];
@@ -237,7 +242,7 @@ export function getSpotifyLibrary () {
                     uniqueSongsAry.push(song);
                 }
             })
-            await fetch(`http://localhost:3001/users/${userId}`, {
+            await fetch(`http://localhost:3001/users/${USER_ID}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
@@ -254,11 +259,11 @@ export function getSpotifyLibrary () {
 }
 
 export async function savePlaylistToSpotify (songsAry) {
-    const userId = localStorage.getItem("user_id");
-    const accessToken = localStorage.getItem("access_token");
+    setAccessToken();
+    setUserId();
 
     // create spotify playlist
-    let url = `https://api.spotify.com/v1/users/${userId}/playlists`;
+    let url = `https://api.spotify.com/v1/users/${USER_ID}/playlists`;
     const newPlaylist = {
         name: "My Vibeify Playlist",
         public: false,
@@ -267,7 +272,7 @@ export async function savePlaylistToSpotify (songsAry) {
     const playlist = await fetch (url, {
         method: "POST",
         headers: {
-            "Authorization": 'Bearer ' + accessToken,
+            "Authorization": 'Bearer ' + ACCESS_TOKEN,
             "Content-Type": "application/json"
         },
         body: JSON.stringify(newPlaylist)
@@ -281,7 +286,7 @@ export async function savePlaylistToSpotify (songsAry) {
     fetch (url, {
         method: "POST",
         headers: {
-            "Authorization": 'Bearer ' + accessToken,
+            "Authorization": 'Bearer ' + ACCESS_TOKEN,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -289,4 +294,12 @@ export async function savePlaylistToSpotify (songsAry) {
         })
     })
     
+}
+
+function setAccessToken () {
+    ACCESS_TOKEN = localStorage.getItem("access_token");
+}
+
+function setUserId () {
+    USER_ID = localStorage.getItem("user_id");
 }
