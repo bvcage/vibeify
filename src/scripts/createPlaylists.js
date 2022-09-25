@@ -1,4 +1,5 @@
-import { fetchData, fetchInfo } from "./spotifyLibrary"
+import { postNewPlaylist, getMergePlaylistId } from "./localDB"
+import { fetchData, fetchInfo, parseSpotifyTracksAry } from "./spotifyLibrary"
 
 const PLAYLIST_LIMIT = 15;
 const PLAYLISTS_URL = "http://localhost:3001/playlists";
@@ -29,7 +30,7 @@ export async function createDefaultPlaylists () {
         .then(list => {return list})
 
     // create merge playlist placeholder
-    playlistAry.push(createPlaylist("merge", "custom"))
+    playlistAry.push(createPlaylist("merge", "merge"))
 
     // create default playlists
     if (!!playlistAry) {
@@ -102,7 +103,9 @@ export async function createDefaultPlaylists () {
 }
 
 export async function createMergePlaylist (playlistIdList) {
-    console.log(playlistIdList);
+
+    // get merge playlist #
+    const newMergeId = await getMergePlaylistId();
 
     // get tracks for each playlist
     let playlistTracksAry = await Promise.all(playlistIdList.map(async (playlistId) => {
@@ -120,6 +123,7 @@ export async function createMergePlaylist (playlistIdList) {
     playlistTracksAry = playlistTracksAry.map(tracksAry => {
         return tracksAry.map(song => song.track);
     }).flat();
+    playlistTracksAry = parseSpotifyTracksAry(playlistTracksAry);
 
     // remove duplicates
     playlistTracksAry = playlistTracksAry.filter((e1, i, ary) => {
@@ -128,8 +132,16 @@ export async function createMergePlaylist (playlistIdList) {
 
     // shuffle songs
     playlistTracksAry = shuffleTracksAry(playlistTracksAry);
-    
-    return playlistTracksAry;
+
+    // save to local DB
+    const newMergePlaylist = {
+        id: "merge_" + newMergeId,
+        type: "merge",
+        tracks: playlistTracksAry
+    }
+    await postNewPlaylist(newMergePlaylist);
+
+    return newMergePlaylist;
 }
 
 function createPlaylist (playlistId, playlistType) {
