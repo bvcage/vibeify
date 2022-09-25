@@ -1,3 +1,5 @@
+import { fetchData, fetchInfo } from "./spotifyLibrary"
+
 const PLAYLIST_LIMIT = 15;
 const PLAYLISTS_URL = "http://localhost:3001/playlists";
 
@@ -99,6 +101,37 @@ export async function createDefaultPlaylists () {
     }
 }
 
+export async function createMergePlaylist (playlistIdList) {
+    console.log(playlistIdList);
+
+    // get tracks for each playlist
+    let playlistTracksAry = await Promise.all(playlistIdList.map(async (playlistId) => {
+        const apiUrl = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
+        // get tracks list
+        const info = await fetchInfo(apiUrl);
+        const spotifyDataAry = await fetchData(apiUrl, info);
+        // save tracks to array
+        let tracksAry = [];
+        spotifyDataAry.forEach(entry => tracksAry.push(...(entry.items)));
+        return tracksAry;
+    }))
+    
+    // remove extra data from spotify & flatten into 1 array
+    playlistTracksAry = playlistTracksAry.map(tracksAry => {
+        return tracksAry.map(song => song.track);
+    }).flat();
+
+    // remove duplicates
+    playlistTracksAry = playlistTracksAry.filter((e1, i, ary) => {
+        return ary.indexOf(ary.find(e2 => e2.id === e1.id)) === i;
+    })
+
+    // shuffle songs
+    playlistTracksAry = shuffleTracksAry(playlistTracksAry);
+    
+    return playlistTracksAry;
+}
+
 function createPlaylist (playlistId, playlistType) {
     const newPlaylist = {
         "id": playlistId,
@@ -117,4 +150,19 @@ function createPlaylist (playlistId, playlistType) {
 
 export function createSimilarPlaylist (songId) {
 
+}
+
+function shuffleTracksAry(tracksAry) {
+    let tracksAryCopy = [...tracksAry]
+    let shuffledAry = [];
+    let numTracks = tracksAry.length;
+
+    while (numTracks > 0) {
+        const index = Math.floor(Math.random() * numTracks);
+        shuffledAry.push(tracksAryCopy[index])
+        tracksAryCopy.splice(index, 1);
+        numTracks--;
+    }
+    
+    return shuffledAry;
 }
