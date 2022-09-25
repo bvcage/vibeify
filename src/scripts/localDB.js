@@ -21,8 +21,8 @@ export async function clearDB () {
     return await fetch(PLAYLIST_URL)
     .then(r => r.json())
     .then(list => {
-        list.forEach(playlist => {
-            fetch(`${PLAYLIST_URL}/${playlist.id}`, {
+        return list.map(playlist => {
+            return fetch(`${PLAYLIST_URL}/${playlist.id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
@@ -30,16 +30,19 @@ export async function clearDB () {
             })
         })
     })
-    .then(async () => {
-        return await fetch(USER_URL)
+    .then(() => {
+        const userId = localStorage.getItem("user_id");
+        const userUrl = `http://localhost:3001/users/${userId}`;
+        return fetch(userUrl)
         .then(r => r.json())
         .then(user => {
-            return fetch(USER_URL, {
+            return fetch(userUrl, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({...user,
+                    "playlists": [],
                     "songs": []
                 })
             })
