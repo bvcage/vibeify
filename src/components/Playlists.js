@@ -23,6 +23,12 @@ function Playlists({ playlistAry, updatePlaylistAry }) {
     setSongsAry(patchSongsAry);
   }
 
+  function onClickMerge (playlist) {
+    setSongsAry(playlist.tracks);
+    setSelectedPlaylist(playlist);
+    setShowSongs(true);
+  }
+
   function onClickPlaylist (playlist) {
     if (playlist !== selectedPlaylist) {
       setShowSongs(true);
@@ -50,7 +56,7 @@ function Playlists({ playlistAry, updatePlaylistAry }) {
         <SearchBar onClickAdd={onClickAdd} />
       </Box>
       <Box sx={{pb: 28}}>
-        {selectedPlaylist && selectedPlaylist.id === "merge" ? <PlaylistMergeForm /> : <SongsList songsAry={songsAry} showSongs={showSongs} onClickDelete={onClickDelete} />}
+        {selectedPlaylist && selectedPlaylist.id === "merge" ? <PlaylistMergeForm onSubmit={onClickMerge} /> : <SongsList songsAry={songsAry} showSongs={showSongs} onClickDelete={onClickDelete} />}
       </Box>
     </Stack>
   )
