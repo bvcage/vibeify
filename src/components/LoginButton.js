@@ -19,7 +19,7 @@ function LoginButton () {
             state: genRandomString(20),
             // code_challenge_method: "S256",
             // code_challenge: "",
-            show_dialog: true,
+            // show_dialog: true,
         })
         let url = `https://accounts.spotify.com/authorize?` + query;
         const width = 600;
