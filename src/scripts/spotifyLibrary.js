@@ -160,11 +160,24 @@ export function getSpotifyLibrary () {
         console.log('fetching playlists...');
         const apiUrl = "https://api.spotify.com/v1/me/playlists";
         const info = await fetchInfo(apiUrl);
-        const dataAry = await fetchData(apiUrl, info);
+        const dataAry = await fetchData(apiUrl, info);  // returns array of arrays
     
-        // save playlists list
+        // create 1 array of playlist items
         let playlistsAry = [];
         dataAry.forEach(entry => playlistsAry.push(...(entry.items)));
+        // save to sinatra backend
+        console.log(playlistsAry)
+        fetch("http://localhost:9292/playlists", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "spotify_user_id": USER_ID,
+                "playlists": playlistsAry
+            })
+        })
+        // save to JSON
         await postPlaylistsAryToLocal(playlistsAry);
 
         // save playlist tracks
