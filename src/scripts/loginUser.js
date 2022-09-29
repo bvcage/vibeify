@@ -55,6 +55,18 @@ export function loginUser (code) {
     }
 
     async function saveUserProfile (profile) {
+        // sinatra backend get / post user
+        fetch("http://localhost:9292/users", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "spotify_id": profile.id,
+                "username": profile.display_name
+            })
+        })
+        // JSON get / post user
         return await fetch(`http://localhost:3001/users`)
         .then(r => r.json())
         .then(async (users) => {
