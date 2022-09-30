@@ -165,8 +165,7 @@ export function getSpotifyLibrary () {
         // create 1 array of playlist items
         let playlistsAry = [];
         dataAry.forEach(entry => playlistsAry.push(...(entry.items)));
-        // save to sinatra backend
-        console.log(playlistsAry)
+        // save playlists to sinatra backend
         fetch("http://localhost:9292/playlists", {
             method: "POST",
             headers: {
@@ -177,12 +176,46 @@ export function getSpotifyLibrary () {
                 "playlists": playlistsAry
             })
         })
-        // save to JSON
+        // save playlists to JSON
         await postPlaylistsAryToLocal(playlistsAry);
+
+        // post saves to sinatra backend
+        const postAry = playlistsAry.map(async playlist => {
+            playlist.tracks = await fetchTracksForPlaylistAry([playlist])
+            return playlist;
+        })
+
+        Promise.all(postAry).then((postAry) => {
+            console.log(postAry)
+            postAry.forEach(async playlist => {
+                const songIdAry = playlist.tracks.map(song => song.id)
+                await fetch('http://localhost:9292/saves', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "playlist_spotify_id": playlist.id,
+                        "song_id_list": songIdAry
+                    })
+                })
+            })
+        })
 
         // save playlist tracks
         playlistsAry = playlistsAry.filter(playlist => playlist.owner.id === USER_ID);
         let allTracksAry = await fetchTracksForPlaylistAry(playlistsAry);
+        // save to sinatra
+        fetch("http://localhost:9292/songs", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "songsAry": allTracksAry
+            })
+        })
+        // save to JSON
         allTracksAry = parseSpotifyTracksAry(allTracksAry);
         await postSongsAryToLocal(allTracksAry);
         return true;
@@ -269,6 +302,28 @@ export function parseSpotifyTracksAry (tracksAry) {
         songsAry.push(songEntry);
     })
     return songsAry;
+}
+
+function postPlaylistSongSaves (playlistSongsAry) {
+    console.log(playlistSongsAry);
+    playlistSongsAry.forEach(playlist => {
+        const playlistId = playlist.id;
+        console.log(playlist)
+        // playlist.forEach(songAry => {
+        //     songAry.items.forEach(async song => {
+        //         return await fetch('http://localhost:9292/saves', {
+        //             method: "POST",
+        //             headers: {
+        //                 "Content-Type": "application/json"
+        //             },
+        //             body: JSON.stringify({
+        //                 "playlist_spotify_id": playlistId,
+        //                 "song_spotify_id": song.track.id
+        //             })
+        //         })
+        //     })
+        // })
+    })
 }
 
 export async function savePlaylistToSpotify (songsAry) {
