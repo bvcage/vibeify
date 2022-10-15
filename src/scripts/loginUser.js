@@ -1,5 +1,5 @@
 import { Base64 } from 'js-base64';
-import { CLIENT_ID, CLIENT_SECRET } from '../keys';
+import { CLIENT_ID, CLIENT_SECRET, BASE_URL } from '../keys';
 
 let accessToken = localStorage.getItem("access_token");
 
@@ -10,7 +10,7 @@ export function loginUser (code) {
         const query = new URLSearchParams({
             grant_type: "authorization_code",
             code: code,
-            redirect_uri: "http://localhost:3000/home/login",
+            redirect_uri: `http://localhost:3000/home/login`,
             client_id: CLIENT_ID,
         });
         const url = `https://accounts.spotify.com/api/token?` + query;
@@ -56,7 +56,7 @@ export function loginUser (code) {
 
     async function saveUserProfile (profile) {
         // sinatra backend get / post user
-        fetch("http://localhost:9292/users", {
+        fetch(`${BASE_URL}/users`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -67,11 +67,15 @@ export function loginUser (code) {
             })
         })
         // JSON get / post user
-        return await fetch(`http://localhost:3001/users`)
+        return await fetch(`${BASE_URL}/users`, {
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
         .then(r => r.json())
         .then(async (users) => {
             if (!users.find(ele => ele.id === profile.id)) {
-                return await fetch(`http://localhost:3001/users`, {
+                return await fetch(`${BASE_URL}/users`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

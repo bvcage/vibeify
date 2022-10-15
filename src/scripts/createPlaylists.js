@@ -1,8 +1,9 @@
 import { postNewPlaylist, getMergePlaylistId } from "./localDB"
 import { fetchData, fetchInfo, parseSpotifyTracksAry } from "./spotifyLibrary"
+import { BASE_URL } from "../keys";
 
 const PLAYLIST_LIMIT = 15;
-const PLAYLISTS_URL = "http://localhost:3001/playlists";
+const PLAYLISTS_URL = `${BASE_URL}/playlists`;
 
 export async function clearPlaylists () {
     return await fetch(PLAYLISTS_URL)
@@ -22,7 +23,7 @@ export async function clearPlaylists () {
 export async function createDefaultPlaylists () {
 
     const userId = localStorage.getItem("user_id");
-    const userUrl = `http://localhost:3001/users/${userId}`;
+    const userUrl = `${BASE_URL}/users/${userId}`;
 
     // get existing playlists list
     let playlistAry = await fetch(PLAYLISTS_URL)
