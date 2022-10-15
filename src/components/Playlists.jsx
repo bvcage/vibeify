@@ -5,7 +5,7 @@ import SongsList from './SongsList'
 import { addSongToPlaylist, removeSongFromPlaylist } from '../scripts/localDB';
 import { Box, Stack } from '@mui/material';
 import SearchBar from './SearchBar';
-import PlaylistMergeForm from './PlaylistMergeForm';
+import PlaylistsMergeForm from './PlaylistsMergeForm';
 
 function Playlists () {
 
@@ -63,7 +63,7 @@ function Playlists () {
         <SearchBar onClickAdd={onClickAdd} />
       </Box>
       <Box sx={{pb: 28}}>
-        {selectedPlaylist && selectedPlaylist.id === "merge" ? <PlaylistMergeForm onSubmit={onClickMerge} /> : <SongsList songsAry={songsAry} showSongs={showSongs} onClickDelete={onClickDelete} />}
+        {selectedPlaylist && selectedPlaylist.id === "merge" ? <PlaylistsMergeForm onSubmit={onClickMerge} /> : <SongsList songsAry={songsAry} showSongs={showSongs} onClickDelete={onClickDelete} />}
       </Box>
     </Stack>
   )
