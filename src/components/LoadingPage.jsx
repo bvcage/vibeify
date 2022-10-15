@@ -46,7 +46,7 @@ function LoadingPage () {
     // complete progress & redirect
     .then(() => {
       setProgress(99)
-      setTimeout(() => navigate('/main/playlists'), 2000)
+      setTimeout(() => navigate('/about'), 2000)
     })
   }, [])
 
