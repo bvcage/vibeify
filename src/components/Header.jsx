@@ -3,7 +3,7 @@ import LoginButton from './LoginButton'
 import Nav from './Nav'
 import Logo from './Logo'
 
-function Header() {
+function Header () {
   return (
     <div className='header'>
         <Logo />
