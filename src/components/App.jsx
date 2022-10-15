@@ -1,9 +1,11 @@
-import '../App.css';
-import React from 'react';
-import { Routes, Route } from "react-router-dom";
-import HomePage from './HomePage';
-import LoadingPage from './LoadingPage';
-import MainPage from './MainPage';
+import '../App.css'
+import React from 'react'
+import { Routes, Route } from "react-router-dom"
+import HomePage from './HomePage'
+import Layout from './Layout'
+import LoadingPage from './LoadingPage'
+import About from './About'
+import Playlists from './Playlists'
 
 function App() {
 
@@ -12,7 +14,10 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/loading" element={<LoadingPage />} />
-        <Route path="main/*" element={<MainPage />} />
+        <Route element={<Layout />}>
+          <Route path="/about" element={<About />} />
+          <Route path="/playlists" element={<Playlists />} />
+        </Route>
       </Routes>
     </div>
   );
