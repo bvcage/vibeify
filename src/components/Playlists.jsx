@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../App.css'
 import PlaylistMenu from './PlaylistMenu'
 import SongsList from './SongsList'
@@ -7,18 +7,25 @@ import { Box, Stack } from '@mui/material';
 import SearchBar from './SearchBar';
 import PlaylistMergeForm from './PlaylistMergeForm';
 
-function Playlists({ playlistAry, updatePlaylistAry }) {
+function Playlists () {
 
+  const [playlistAry, setPlaylistAry] = useState([])
   const [selectedPlaylist, setSelectedPlaylist] = useState();
   const [showSongs, setShowSongs] = useState(false);
   const [songsAry, setSongsAry] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/playlists')
+    .then(r=>r.json())
+    .then(data => setPlaylistAry(data))
+  }, [])
 
   function onClickDelete (songId) {
     const patchSongsAry = removeSongFromPlaylist(selectedPlaylist, songId);
     const patchPlaylist = {...selectedPlaylist,
       "tracks": patchSongsAry
     }
-    updatePlaylistAry(patchPlaylist);
+    setPlaylistAry(patchPlaylist);
     setSelectedPlaylist(patchPlaylist);
     setSongsAry(patchSongsAry);
   }
@@ -44,7 +51,7 @@ function Playlists({ playlistAry, updatePlaylistAry }) {
     const newSongPlaylist = {...selectedPlaylist,
       "tracks": newSongsAry
     }
-    updatePlaylistAry(newSongPlaylist);
+    setPlaylistAry(newSongPlaylist);
     setSelectedPlaylist(newSongPlaylist);
     setSongsAry(newSongsAry);
   };
