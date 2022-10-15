@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import '../App.css'
-import PlaylistMenu from './PlaylistMenu'
+import PlaylistsMenu from './PlaylistsMenu'
 import SongsList from './SongsList'
 import { addSongToPlaylist, removeSongFromPlaylist } from '../scripts/localDB';
 import { Box, Stack } from '@mui/material';
@@ -59,7 +59,7 @@ function Playlists () {
   return (
     <Stack spacing={2}>
       <Box>
-        <PlaylistMenu playlistAry={playlistAry} onClickPlaylist={onClickPlaylist} />
+        <PlaylistsMenu playlistAry={playlistAry} onClickPlaylist={onClickPlaylist} />
         <SearchBar onClickAdd={onClickAdd} />
       </Box>
       <Box sx={{pb: 28}}>
