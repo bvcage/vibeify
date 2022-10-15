@@ -3,19 +3,17 @@ import { useNavigate } from 'react-router-dom'
 import { Avatar, Box, Button, ButtonGroup, Menu, MenuItem } from '@mui/material'
 import LoginButton from './LoginButton'
 
-
-
-function Nav() {
+function Nav () {
 
   const userData = (JSON.parse(localStorage.getItem("user_profile")))
   
   const navigate = useNavigate();
   
   const onClickPlaylists = () => {
-    navigate('/main/playlists')
+    navigate('/playlists')
   };
   const onClickAbout = () => {
-    navigate('/main/about')
+    navigate('/about')
   }
 
   const [anchorEl, setAnchorEl] = React.useState(null);
