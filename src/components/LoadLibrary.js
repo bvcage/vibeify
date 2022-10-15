@@ -1,5 +1,4 @@
 import React from 'react';
-import "../App.css";
 import { getSpotifyLibrary } from "../scripts/spotifyLibrary";
 import { useNavigate } from "react-router-dom";
 

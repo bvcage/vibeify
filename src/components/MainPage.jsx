@@ -8,7 +8,7 @@ import Playlists from './Playlists'
 import { clearPlaylists, createDefaultPlaylists } from '../scripts/createPlaylists';
 import { Container } from '@mui/material'
 
-function Main() {
+function MainPage () {
 
   // direct to home if user not logged in
   if (!localStorage.getItem("user_id")) window.location.replace("http://localhost:3000/home");
@@ -49,4 +49,4 @@ function Main() {
   )
 }
 
-export default Main
+export default MainPage
