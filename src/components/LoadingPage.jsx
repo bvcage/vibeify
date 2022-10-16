@@ -18,7 +18,7 @@ function LoadingPage () {
     // get songs
     .then(data => {
       setProgress(16)
-      return getSongs([data[0], data[8]])
+      return getSongs(data)
     })
     // save to join table (saves)
     .then(data => {
