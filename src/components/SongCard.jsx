@@ -4,12 +4,13 @@ import { red } from '@mui/material/colors'
 import '../images/logo300.png'
 
 
-function SongCard({ song, onClickDelete }) {
-  const primary = red[50]
+function SongCard ( props ) {
+  const { song, onClickDelete } = props
   const { id, name, artist, album_name, album_art_url, spotify_url } = song
+  const primary = red[50]
 
   function handleRemoveSong () {
-    onClickDelete(id)
+    onClickDelete(song)
   }
 
   function showSongDetails () {   // for testing
