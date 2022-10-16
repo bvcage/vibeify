@@ -1,7 +1,8 @@
 import React from "react";
 import { Button, Card } from "@mui/material";
 
-function PlaylistCard({ playlist, onClickPlaylist }) {
+function PlaylistsCard ( props ) {
+  const { playlist, onClickPlaylist } = props
 
   function handleClick() {
     onClickPlaylist(playlist);
@@ -19,10 +20,10 @@ function PlaylistCard({ playlist, onClickPlaylist }) {
         variant='contained'
         fullWidth
         sx={{height: '100%'}}
-        >{playlist.id}
+        >{playlist.name}
       </Button>
     </Card>
   );
 }
 
-export default PlaylistCard;
+export default PlaylistsCard;
