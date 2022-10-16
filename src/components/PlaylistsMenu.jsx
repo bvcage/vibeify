@@ -2,7 +2,8 @@ import React from "react";
 import PlaylistCard from "./PlaylistCard";
 import { Grid } from "@mui/material";
 
-function PlaylistMenu({ playlistAry, onClickPlaylist }) {
+function PlaylistMenu ( props ) {
+  const { playlistAry, onClickPlaylist } = props
 
   const playlistCards = playlistAry.map((playlist) => {
     return (
@@ -18,6 +19,15 @@ function PlaylistMenu({ playlistAry, onClickPlaylist }) {
 
   return (
     <Grid container spacing={1}>
+      {/* merge button */}
+      <Grid item xs={3} key='merge'>
+        <PlaylistCard
+          key='merge'
+          playlist={{id: 'merge'}}
+          onClickPlaylist={onClickPlaylist}
+        />
+      </Grid>
+      {/* pre-made playlists */}
       {playlistCards}
     </Grid>
   );
