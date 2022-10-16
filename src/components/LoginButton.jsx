@@ -22,6 +22,7 @@ function LoginButton () {
         else {
             const user = await authorizeVibeify()
             saveToSinatra('/users', user)
+            .then(user => localStorage.setItem('user_id', user.id))
             setIsLoggedIn(!isLoggedIn)
             navigate('/loading')
         }
