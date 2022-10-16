@@ -1,20 +1,19 @@
 import React from 'react'
-import Link from '@mui/material/Link'
+import { Card, CardContent, CardMedia, Link, IconButton, Typography } from '@mui/material'
 import { red } from '@mui/material/colors'
-import { Card, CardContent, CardMedia, Typography, IconButton } from '@mui/material'
-import "../App.css"
+import '../images/logo300.png'
 
 
 function SongCard({ song, onClickDelete }) {
   const primary = red[50]
-  const { id, name, album, artists, url } = song;
+  const { id, name, artist, album_name, album_art_url, spotify_url } = song
 
   function handleRemoveSong () {
-    onClickDelete(id);
+    onClickDelete(id)
   }
 
-  function showSongDetails () {   // for testing purposes
-    console.log(song.audio_features);
+  function showSongDetails () {   // for testing
+    console.log(song.audio_features)
   }
 
   return (
@@ -23,27 +22,27 @@ function SongCard({ song, onClickDelete }) {
       <CardMedia
         component="img"
         sx={{ width: 120, height: 120 }}
-        image={album.imageUrl}
-        alt={album.name + " album art"}
+        image={album_art_url}
+        alt={album_name + " album art"}
       />
 
-      <CardContent sx={{display: 'flex', flexDirection: 'column', width: 370, }}>
+      <CardContent sx={{display: 'flex', flexDirection: 'column', width: 370 }}>
         <Link
-          href={url}
+          href={spotify_url}
           target="_blank"
           rel="noopener noreferrer"
           color={primary}
           >{name}
         </Link>
         <Typography variant='body2' sx={{maxWidth: 200, color: 'white'}}>
-          {album.name}
+          {album_name}
         </Typography>
         <Typography variant='body1' sx={{color: 'white'}}>
-          {artists.map(artist => artist.name).join(", ")}
+          {artist}
         </Typography>
       </CardContent>
         <div className='deleteDiv'>
-        <IconButton size='small' onClick={handleRemoveSong}>🗑</IconButton>
+          <IconButton size='small' onClick={handleRemoveSong}>🗑</IconButton>
         </div>
     </Card>
   )
