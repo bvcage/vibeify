@@ -1,8 +1,10 @@
 import { Base64 } from 'js-base64'
 import { CLIENT_ID, CLIENT_SECRET } from '../keys'
-import { saveToSinatra } from './sinatra'
+import { putToSinatra } from './sinatra'
 
 let access_token = localStorage.getItem('access_token')
+let user_id = localStorage.getItem('user_id')
+let user_spotify_id = localStorage.getItem('user_spotify_id')
 
 export async function authorizeVibeify () {
    console.log('authorizing app...')
@@ -59,6 +61,70 @@ export async function getSongs (playlists) {
    }
    return new Promise(resolve => {
       Promise.all(songs).then(data => resolve(data))
+   })
+}
+
+export async function savePlaylist (playlist) {
+   if (playlist.spotify_id) { return } // do not create if already exists
+   refreshTokens()
+
+   // create spotify playlist
+   let api = `https://api.spotify.com/v1/users/${user_spotify_id}/playlists`
+   const post = {
+      name: playlist.name,
+      description: playlist.description,
+      public: false
+   }
+   const spotify = await fetch (api, {
+      method: 'POST',
+      headers: {
+         "Authorization": 'Bearer ' + access_token,
+         "Content-Type": "application/json"
+      },
+      body: JSON.stringify(post)
+   }).then(r=>r.json())
+
+   // TO DO: add image if user specifies
+   api = `https://api.spotify.com/v1/playlists/${spotify.id}/images`
+   // fetch (api, {
+   //    method: 'PUT',
+   //    headers: {
+   //       "Authorization": 'Bearer ' + access_token,
+   //       "Content-Type": "application/json"
+   //    },
+   //    body: JSON.stringify(playlist.image_url)
+   // })
+
+   // update local playlist
+   playlist = {...playlist,
+      spotify_id: spotify.id,
+      owner_id: spotify.owner.id,
+      user_id: user_id
+   }
+   putToSinatra('/playlists', playlist.id, playlist)
+
+   // add songs to spotify playlist
+   api = `https://api.spotify.com/v1/playlists/${spotify.id}/tracks`
+   const songs = playlist.songs.map(song => 'spotify:track:' + song.spotify_id)
+   const limit = 100
+   const num = songs.length / limit
+   const calls = num.times.map(async i => {
+      const slice = songs.slice(i, limit).join(',')
+      return await fetch (api, {
+         method: 'POST',
+         headers: {
+            "Authorization": 'Bearer ' + access_token,
+            "Content-Type": "application/json"
+         },
+         body: JSON.stringify({
+            uris: slice
+         })
+      })
+   })
+
+   // return updated playlist in backend format
+   return new Promise (resolve => {
+      Promise.all(calls).then(() => resolve(playlist))
    })
 }
 
@@ -201,4 +267,6 @@ async function getUserProfile (tokens) {
 
 function refreshTokens () {
    access_token = localStorage.getItem('access_token')
+   user_spotify_id = localStorage.getItem('user_spotify_id')
+   user_id = localStorage.getItem('user_id')
 }

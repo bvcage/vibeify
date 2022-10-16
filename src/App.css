@@ -70,6 +70,27 @@
   gap: 8px;
 }
 
+#playlist-save-form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  width: 50%;
+  min-width: 400px;
+  padding: 1rem;
+  border-radius: 1rem;
+  text-align: center;
+}
+
+#playlist-save-form > div > * {
+  margin-top: 1rem;
+}
+
+#playlist-save-form .MuiFormControl-root {
+  width: 100%;
+}
+
 .avatar {
   padding-right: 8px;
 }

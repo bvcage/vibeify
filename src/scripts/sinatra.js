@@ -18,6 +18,22 @@ export function fetchFromSinatra (ext) {
    }).then(r=>r.json())
 }
 
+export function putToSinatra (ext, id, data) {
+   refreshUser()
+   const put = {
+      'user': USER_SID,
+      'data': data
+   }
+   return fetch (URL + ext + `/${id}`, {
+      method: 'PUT',
+      headers: {
+         'Content-Type': 'application/json',
+         'Accept': 'application/json'
+      },
+      body: JSON.stringify(put)
+   }).then(r=>r.json())
+}
+
 export function saveToSinatra (ext, data) {
    console.log(`> saving data to ${ext}...`)
    refreshUser()

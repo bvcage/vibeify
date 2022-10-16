@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Stack } from '@mui/material'
+import { Box, Modal, Stack } from '@mui/material'
+import { savePlaylist } from '../scripts/spotify'
 import PlaylistsMenu from './PlaylistsMenu'
 import PlaylistsMergeForm from './PlaylistsMergeForm'
 import SongsList from './SongsList'
 import SearchBar from './SearchBar'
+import PlaylistsSaveForm from './PlaylistsSaveForm'
 
 
 function Playlists () {
 
   const [playlistAry, setPlaylistAry] = useState([])
-  const [selectedPlaylist, setSelectedPlaylist] = useState();
-  const [showSongs, setShowSongs] = useState(false);
-  const [songsAry, setSongsAry] = useState([]);
+  const [selectedPlaylist, setSelectedPlaylist] = useState()
+  const [showSaveModal, setShowSaveModal] = useState(false)
+  const [showSongs, setShowSongs] = useState(false)
+  const [songsAry, setSongsAry] = useState([])
 
   useEffect(() => {
-    fetch('http://localhost:9292/playlists/defaults')
+    const id = localStorage.getItem('user_id')
+    fetch(`http://localhost:9292/users/${id}/vibeify`)
     .then(r=>r.json())
     .then(data => setPlaylistAry(data))
   }, [])
@@ -57,6 +61,22 @@ function Playlists () {
     }
   }
 
+  function onClickSave () {
+    setShowSaveModal(true)
+  }
+
+  function onClickSubmitSave (playlist) {
+    closeSaveModal()
+    savePlaylist(playlist)
+    .then(updated => {
+      setSelectedPlaylist(updated)
+      setPlaylistAry(playlistAry.map(existing => {
+        if (existing.id === updated.id) { return updated }
+        return existing
+      }))
+    })
+  }
+
   function onClickAdd (song) {
     console.log(song)
     // const newSongsAry = addSongToPlaylist(selectedPlaylist, song);
@@ -66,7 +86,21 @@ function Playlists () {
     // setPlaylistAry(newSongPlaylist);
     // setSelectedPlaylist(newSongPlaylist);
     // setSongsAry(newSongsAry);
-  };
+  }
+
+  function closeSaveModal () {
+    setShowSaveModal(false)
+  }
+
+  const saveModal = (
+    <Modal
+      open={showSaveModal}
+      onClose={closeSaveModal}>
+        <PlaylistsSaveForm
+          playlist={selectedPlaylist}
+          onClickSubmit={onClickSubmitSave} />
+    </Modal>
+  )
 
   return (
     <Stack spacing={2}>
@@ -75,8 +109,16 @@ function Playlists () {
         {/* <SearchBar onClickAdd={onClickAdd} /> */}
       </Box>
       <Box sx={{pb: 28}}>
-        {selectedPlaylist && selectedPlaylist.id === "merge" ? <PlaylistsMergeForm onSubmit={onClickMerge} /> : <SongsList songsAry={songsAry} showSongs={showSongs} onClickDelete={onClickDelete} />}
+        {selectedPlaylist && selectedPlaylist.id === "merge" ?
+          <PlaylistsMergeForm onSubmit={onClickMerge} />
+          :
+          <SongsList songsAry={songsAry}
+            showSongs={showSongs}
+            onClickDelete={onClickDelete}
+            onClickSave={onClickSave} />
+        }
       </Box>
+      {saveModal}
     </Stack>
   )
 }
