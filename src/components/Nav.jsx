@@ -5,7 +5,7 @@ import LoginButton from './LoginButton'
 
 function Nav () {
 
-  const userData = (JSON.parse(localStorage.getItem("user_profile")))
+  const userData = (JSON.parse(localStorage.getItem("user_spotify_profile")))
   
   const navigate = useNavigate();
   
