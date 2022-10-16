@@ -1,13 +1,12 @@
 import { React }from 'react'
 import SongCard from './SongCard'
 import { Button, Card, Grid } from '@mui/material'
-import { savePlaylistToSpotify } from '../scripts/spotifyLibrary'
 
 function SongsList ( props ) {
-  const { songsAry, showSongs, onClickDelete } = props
+  const { songsAry, showSongs, onClickDelete, onClickSave } = props
 
   function handleClickSave () {
-    savePlaylistToSpotify(songsAry);
+    onClickSave()
   }
 
   const songs = songsAry.map(song => {
