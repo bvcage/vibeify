@@ -193,8 +193,8 @@ async function getUserProfile (tokens) {
    })
    .then(r => r.json())
    .then(profile => {
-      localStorage.setItem('user_id', profile.id)
-      localStorage.setItem('user_profile', JSON.stringify(profile))
+      localStorage.setItem('user_spotify_id', profile.id)
+      localStorage.setItem('user_spotify_profile', JSON.stringify(profile))
       return profile
    });
 }
