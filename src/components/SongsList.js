@@ -3,7 +3,8 @@ import SongCard from './SongCard'
 import { Button, Card, Grid } from '@mui/material'
 import { savePlaylistToSpotify } from '../scripts/spotifyLibrary'
 
-function SongsList({ songsAry, showSongs, onClickDelete }) {
+function SongsList ( props ) {
+  const { songsAry, showSongs, onClickDelete } = props
 
   function handleClickSave () {
     savePlaylistToSpotify(songsAry);
@@ -11,7 +12,7 @@ function SongsList({ songsAry, showSongs, onClickDelete }) {
 
   const songs = songsAry.map(song => {
     return (
-      <Grid item xs={4} key={song.id} >
+      <Grid item xs={4} key={song.id}>
         <SongCard key={song.id} song={song} onClickDelete={onClickDelete} />
       </Grid>
     )
