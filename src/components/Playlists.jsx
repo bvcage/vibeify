@@ -31,9 +31,9 @@ function Playlists () {
   }
 
   function onClickMerge (playlist) {
-    setSongsAry(playlist.tracks);
+    setSongsAry(playlist.songs);
     setSelectedPlaylist(playlist);
-    setShowSongs(true);
+    // setShowSongs(true);
   }
 
   function onClickPlaylist (playlist) {

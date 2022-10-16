@@ -1,33 +1,32 @@
-import { useEffect, useState } from 'react';
-import { loadSpotifyPlaylistsAry } from '../scripts/localDB'
+import React, { useEffect, useState } from 'react'
 import { Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material'
-import { createMergePlaylist } from '../scripts/createPlaylists'
+import { fetchFromSinatra, saveToSinatra } from '../scripts/sinatra'
 
 function PlaylistMergeForm ({ onSubmit }) {
 
    const [spotifyPlaylistsAry, setSpotifyPlaylistsAry] = useState([]);
-   const [formValues, setFormValues] = useState({});
+   const [selected, setSelected] = useState({});
 
    useEffect(() => {
-      loadSpotifyPlaylistsAry()
+      fetchFromSinatra('playlists')
       .then(data => setSpotifyPlaylistsAry(data));
    }, [])
 
    function handleCheckbox (event) {
       if (event.target.checked) {
-         setFormValues({...formValues,
+         setSelected({...selected,
             [event.target.value]: event.target.checked
          })
       } else {
-         let temp = {...formValues}
+         let temp = {...selected}
          delete temp[event.target.value]
-         setFormValues(temp)
+         setSelected(temp)
       }
    }
 
    function handleSubmit (event) {
       event.preventDefault();
-      createMergePlaylist(Object.keys(formValues))
+      saveToSinatra('/playlists/merge', Object.keys(selected))
       .then(playlist => onSubmit(playlist))
    }
 
