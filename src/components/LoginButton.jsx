@@ -2,22 +2,20 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button';
 import { authorizeVibeify } from '../scripts/spotify'
-import { saveToSinatra } from '../scripts/sinatra'
+import { saveToSinatra, cleanupSinatra } from '../scripts/sinatra'
 
 
 function LoginButton () {
 
-    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("user_id") !== null);
-    const navigate = useNavigate();
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("user_id") !== null)
+    const navigate = useNavigate()
 
     async function toggleLoginLogout () {
         if (isLoggedIn) {
-            // clearDB()
-            // .then(() => {
-                localStorage.clear();
-                setIsLoggedIn(!isLoggedIn);
-                window.location.replace('http://localhost:3000')
-            // })
+            localStorage.clear()
+            cleanupSinatra()
+            setIsLoggedIn(!isLoggedIn)
+            window.location.replace('http://localhost:3000')
         }
         else {
             const user = await authorizeVibeify()

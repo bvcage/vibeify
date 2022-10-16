@@ -1,9 +1,17 @@
 const URL = 'http://localhost:9292'
-let USER = localStorage.getItem('user_spotify_id')
+let USER_ID = localStorage.getItem('user_id')
+let USER_SID = localStorage.getItem('user_spotify_id')
+
+export function cleanupSinatra () {
+   refreshUser()
+   return fetch (`${URL}/users/${USER_ID}/cleanup`, {
+      method: 'DELETE'
+   })
+}
 
 export function fetchFromSinatra (ext) {
-   const userId = localStorage.getItem('user_id')
-   return fetch (`${URL}/users/${userId}/${ext}`, {
+   refreshUser()
+   return fetch (`${URL}/users/${USER_ID}/${ext}`, {
       headers: {
          'Accept': 'application/json'
       }
@@ -14,7 +22,7 @@ export function saveToSinatra (ext, data) {
    console.log(`> saving data to ${ext}...`)
    refreshUser()
    const post = {
-      'user': USER,
+      'user': USER_SID,
       'data': data
    }
    return fetch (URL + ext, {
@@ -28,5 +36,6 @@ export function saveToSinatra (ext, data) {
 }
 
 function refreshUser () {
-   USER = localStorage.getItem('user_spotify_id')
+   USER_ID = localStorage.getItem('user_id')
+   USER_SID = localStorage.getItem('user_spotify_id')
 }
